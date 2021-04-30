@@ -1,0 +1,19 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer components {
+    button,
+    .btn {
+        @apply focus:outline-none;
+    }
+    .user-name {
+        @apply text-sm text-blue-800 font-bold;
+    }
+    .time-ago {
+        @apply text-xs text-gray-600;
+    }
+}
+.border-b-width-1 {
+    border-bottom-width: 1px !important;
+}

@@ -22,8 +22,23 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        //$gender =
+        $name = $this->faker->name();
+        $fname = $this->faker->firstName;
+        $lname = $this->faker->lastName;
+        $abrr = substr($fname, 0, 1) . substr($lname, 0, 1);
+        dump($abrr);
+        //dd($this->faker->imageUrl(100, 100, null, false, $abrr, false));
+        //substr("hello", 0, 1)
         return [
-            'name' => $this->faker->name(),
+            'name' => $fname . ' ' . $lname,
+            'username' => $this->faker->unique()->userName,
+            'country' => $this->faker->country,
+            'avatar' => $this->faker->imageUrl(400, 400, null, false, $abrr, false),
+            'bio' => $this->faker->text(200),
+            'city' => $this->faker->city,
+            'address' => $this->faker->address,
+            'website' => $this->faker->url,
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
