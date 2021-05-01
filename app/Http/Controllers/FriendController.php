@@ -52,6 +52,6 @@ class FriendController extends Controller
         if ($friend) {
             $friend->delete();
         }
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Friend removed.');
     }
 }

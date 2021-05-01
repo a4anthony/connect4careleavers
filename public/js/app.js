@@ -37683,19 +37683,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @headlessui/vue */ "./node_modules/@headlessui/vue/dist/headlessui.esm.js");
-/* harmony import */ var _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @heroicons/vue/solid */ "./node_modules/@heroicons/vue/solid/esm/index.js");
-/* harmony import */ var _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @heroicons/vue/outline */ "./node_modules/@heroicons/vue/outline/esm/index.js");
-/* harmony import */ var _Layouts_App__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Layouts/App */ "./resources/js/Layouts/App.vue");
-/* harmony import */ var _Components_Profile_ProfileHeader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/Profile/ProfileHeader */ "./resources/js/Components/Profile/ProfileHeader.vue");
-/* harmony import */ var _Components_Profile_ProfileActions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Components/Profile/ProfileActions */ "./resources/js/Components/Profile/ProfileActions.vue");
-/* harmony import */ var _Components_Profile_ProfileNav__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Components/Profile/ProfileNav */ "./resources/js/Components/Profile/ProfileNav.vue");
-/* harmony import */ var _Shared_Feed__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @/Shared/Feed */ "./resources/js/Shared/Feed.vue");
-/* harmony import */ var _Shared_CreatePost__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @/Shared/CreatePost */ "./resources/js/Shared/CreatePost.vue");
-/* harmony import */ var _Components_Profile_ProfileFriends__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @/Components/Profile/ProfileFriends */ "./resources/js/Components/Profile/ProfileFriends.vue");
-
-
-
+/* harmony import */ var _Layouts_App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/App */ "./resources/js/Layouts/App.vue");
+/* harmony import */ var _Components_Profile_ProfileHeader__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Components/Profile/ProfileHeader */ "./resources/js/Components/Profile/ProfileHeader.vue");
+/* harmony import */ var _Components_Profile_ProfileActions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Components/Profile/ProfileActions */ "./resources/js/Components/Profile/ProfileActions.vue");
+/* harmony import */ var _Components_Profile_ProfileNav__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/Profile/ProfileNav */ "./resources/js/Components/Profile/ProfileNav.vue");
+/* harmony import */ var _Shared_Feed__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Shared/Feed */ "./resources/js/Shared/Feed.vue");
+/* harmony import */ var _Shared_CreatePost__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/Shared/CreatePost */ "./resources/js/Shared/CreatePost.vue");
+/* harmony import */ var _Components_Profile_ProfileFriends__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/Components/Profile/ProfileFriends */ "./resources/js/Components/Profile/ProfileFriends.vue");
 
 
 
@@ -37705,31 +37699,13 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {
-    ProfileFriends: _Components_Profile_ProfileFriends__WEBPACK_IMPORTED_MODULE_9__.default,
-    CreatePost: _Shared_CreatePost__WEBPACK_IMPORTED_MODULE_8__.default,
-    Feed: _Shared_Feed__WEBPACK_IMPORTED_MODULE_7__.default,
-    ProfileNav: _Components_Profile_ProfileNav__WEBPACK_IMPORTED_MODULE_6__.default,
-    ProfileActions: _Components_Profile_ProfileActions__WEBPACK_IMPORTED_MODULE_5__.default,
-    ProfileHeader: _Components_Profile_ProfileHeader__WEBPACK_IMPORTED_MODULE_4__.default,
-    App: _Layouts_App__WEBPACK_IMPORTED_MODULE_3__.default,
-    Menu: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.Menu,
-    MenuButton: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.MenuButton,
-    MenuItem: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.MenuItem,
-    MenuItems: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.MenuItems,
-    Popover: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.Popover,
-    PopoverButton: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.PopoverButton,
-    PopoverOverlay: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.PopoverOverlay,
-    PopoverPanel: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.PopoverPanel,
-    TransitionChild: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.TransitionChild,
-    TransitionRoot: _headlessui_vue__WEBPACK_IMPORTED_MODULE_0__.TransitionRoot,
-    ArrowNarrowLeftIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__.ArrowNarrowLeftIcon,
-    BellIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__.BellIcon,
-    HomeIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__.HomeIcon,
-    MenuIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__.MenuIcon,
-    PaperClipIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__.PaperClipIcon,
-    QuestionMarkCircleIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__.QuestionMarkCircleIcon,
-    SearchIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_1__.SearchIcon,
-    XIcon: _heroicons_vue_outline__WEBPACK_IMPORTED_MODULE_2__.XIcon
+    ProfileFriends: _Components_Profile_ProfileFriends__WEBPACK_IMPORTED_MODULE_6__.default,
+    CreatePost: _Shared_CreatePost__WEBPACK_IMPORTED_MODULE_5__.default,
+    Feed: _Shared_Feed__WEBPACK_IMPORTED_MODULE_4__.default,
+    ProfileNav: _Components_Profile_ProfileNav__WEBPACK_IMPORTED_MODULE_3__.default,
+    ProfileActions: _Components_Profile_ProfileActions__WEBPACK_IMPORTED_MODULE_2__.default,
+    ProfileHeader: _Components_Profile_ProfileHeader__WEBPACK_IMPORTED_MODULE_1__.default,
+    App: _Layouts_App__WEBPACK_IMPORTED_MODULE_0__.default
   },
   props: {
     user: Object,
@@ -37769,13 +37745,10 @@ __webpack_require__.r(__webpack_exports__);
         name: "Friends",
         href: "show.profile.friends",
         count: this.friends.length
-      }, {
-        name: "About",
-        href: "show.profile.about"
       }];
 
       if (this.currentUser) {
-        this.tabs.splice(2, 0, {
+        this.tabs.push({
           name: "Friend Requests",
           href: "show.profile.friends.request",
           count: this.friendRequests.length
@@ -38804,26 +38777,26 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
 
   var _component_confirm_modal = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("confirm-modal");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", null, [$props.user.current_friend ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", {
+  return $props.user.current_friend ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("button", {
     key: 0,
     type: "button",
-    onClick: _cache[1] || (_cache[1] = function ($event) {
+    onClick: _cache[2] || (_cache[2] = function ($event) {
       return $options.openModal($props.user);
     }),
     "class": "font-bold inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-400 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-red-500"
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_UserRemoveIcon, {
     "class": "-ml-0.5 mr-2 h-4 w-4",
     "aria-hidden": "true"
-  }), _hoisted_1])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_confirm_modal, {
+  }), _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_confirm_modal, {
     open: $data.showModal,
     onConfirmed: $options.unfriend,
     text: $data.modalText,
-    onClose: _cache[2] || (_cache[2] = function ($event) {
+    onClose: _cache[1] || (_cache[1] = function ($event) {
       return $data.showModal = false;
     })
   }, null, 8
   /* PROPS */
-  , ["open", "onConfirmed", "text"])]);
+  , ["open", "onConfirmed", "text"])])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true);
 });
 
 /***/ }),
@@ -39356,7 +39329,7 @@ var _withId = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.withScopeId)("dat
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-7c4eb8cd");
 
 var _hoisted_1 = {
-  "class": "mt-8",
+  "class": "mt-8 mb-10",
   style: {
     "min-height": "100vh"
   }

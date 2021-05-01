@@ -75,7 +75,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="lg:col-start-3 lg:col-span-1">
                     <div class="bg-white shadow rounded-lg p-4">side</div>
                 </div>
@@ -85,29 +84,6 @@
 </template>
 
 <script>
-import {
-    Menu,
-    MenuButton,
-    MenuItem,
-    MenuItems,
-    Popover,
-    PopoverButton,
-    PopoverOverlay,
-    PopoverPanel,
-    TransitionChild,
-    TransitionRoot,
-} from "@headlessui/vue";
-import {
-    ArrowNarrowLeftIcon,
-    CheckIcon,
-    HomeIcon,
-    PaperClipIcon,
-    QuestionMarkCircleIcon,
-    SearchIcon,
-    ThumbUpIcon,
-    UserIcon,
-} from "@heroicons/vue/solid";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
 import App from "@/Layouts/App";
 import ProfileHeader from "@/Components/Profile/ProfileHeader";
 import ProfileActions from "@/Components/Profile/ProfileActions";
@@ -125,24 +101,6 @@ export default {
         ProfileActions,
         ProfileHeader,
         App,
-        Menu,
-        MenuButton,
-        MenuItem,
-        MenuItems,
-        Popover,
-        PopoverButton,
-        PopoverOverlay,
-        PopoverPanel,
-        TransitionChild,
-        TransitionRoot,
-        ArrowNarrowLeftIcon,
-        BellIcon,
-        HomeIcon,
-        MenuIcon,
-        PaperClipIcon,
-        QuestionMarkCircleIcon,
-        SearchIcon,
-        XIcon,
     },
     props: {
         user: Object,
@@ -185,14 +143,10 @@ export default {
                     href: "show.profile.friends",
                     count: this.friends.length,
                 },
-                {
-                    name: "About",
-                    href: "show.profile.about",
-                },
             ];
 
             if (this.currentUser) {
-                this.tabs.splice(2, 0, {
+                this.tabs.push({
                     name: "Friend Requests",
                     href: "show.profile.friends.request",
                     count: this.friendRequests.length,

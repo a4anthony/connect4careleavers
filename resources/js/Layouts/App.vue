@@ -2,7 +2,7 @@
     <div>
         <navigation-bar />
         <alerts />
-        <main class="mt-8" style="min-height: 100vh">
+        <main class="mt-8 mb-10" style="min-height: 100vh">
             <slot></slot>
         </main>
         <scroll-to-top />

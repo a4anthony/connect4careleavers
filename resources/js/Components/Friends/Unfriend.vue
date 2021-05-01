@@ -1,21 +1,20 @@
 <template>
-    <div>
-        <button
-            v-if="user.current_friend"
-            type="button"
-            @click="openModal(user)"
-            class="font-bold inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-400 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-red-500"
-        >
-            <UserRemoveIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-            Unfriend
-        </button>
+    <button
+        v-if="user.current_friend"
+        type="button"
+        @click="openModal(user)"
+        class="font-bold inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-400 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-red-500"
+    >
+        <UserRemoveIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
+        Unfriend
+
         <confirm-modal
             :open="showModal"
             @confirmed="unfriend"
             :text="modalText"
             @close="showModal = false"
         />
-    </div>
+    </button>
 </template>
 
 <script>
