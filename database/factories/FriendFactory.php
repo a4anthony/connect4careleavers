@@ -22,7 +22,7 @@ class FriendFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'status' => mt_rand(0, 1)
         ];
     }
 }

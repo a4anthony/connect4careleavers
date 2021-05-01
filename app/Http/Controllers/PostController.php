@@ -24,7 +24,7 @@ class PostController extends Controller
             'publicity' => \request('publicity'),
             'user_id' => \request()->user()->id
         ]);
-        return redirect()->route('home')->with('success', 'Posted successfully.');
+        return redirect()->back()->with('success', 'Posted successfully.');
     }
 
     public function like()
@@ -57,7 +57,7 @@ class PostController extends Controller
         if ($post) {
             $post->delete();
         }
-        return redirect()->route('home')->with('success', 'Posted deleted.');
+        return redirect()->back()->with('success', 'Posted deleted.');
 
     }
 }

@@ -8,16 +8,31 @@
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
                     <div class="mr-2">
-                        <img
-                            class="h-8 w-8 rounded-full"
-                            :src="user.imageUrl"
-                            alt=""
-                        />
+                        <inertia-link
+                            :href="
+                                route('show.profile', {
+                                    username: feed.author.username,
+                                })
+                            "
+                        >
+                            <img
+                                class="h-8 w-8 rounded-full"
+                                :src="feed.author.avatar"
+                                alt=""
+                            />
+                        </inertia-link>
                     </div>
                     <div>
-                        <span class="block user-name">{{
-                            feed.author.username
-                        }}</span>
+                        <inertia-link
+                            class="block user-name"
+                            :href="
+                                route('show.profile', {
+                                    username: feed.author.username,
+                                })
+                            "
+                        >
+                            {{ feed.author.username }}
+                        </inertia-link>
                         <span class="block text-xs text-gray-700">
                             {{ feed.created_at }}
                         </span>
@@ -108,6 +123,7 @@
             </div>
         </div>
         <confirm-modal
+            @close="showModal = false"
             :open="showModal"
             @confirmed="deletePost"
             text="Are you sure you want to delete this post?"

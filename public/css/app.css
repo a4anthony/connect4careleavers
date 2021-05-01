@@ -805,6 +805,11 @@ button:focus, .btn:focus {
   color: rgba(30, 64, 175, var(--tw-text-opacity));
 }
 
+.user-name:hover {
+  --tw-text-opacity: 1;
+  color: rgba(37, 99, 235, var(--tw-text-opacity));
+}
+
 .time-ago {
   font-size: 0.75rem;
   line-height: 1rem;

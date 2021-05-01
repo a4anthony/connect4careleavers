@@ -4,7 +4,7 @@
         v-if="show"
         style="z-index: 100"
     >
-        <div class="shadow-sm flex rounded-md bg-green-600 p-2">
+        <div class="shadow-sm mx-3 p-3 flex rounded-md bg-green-600">
             <div class="flex-shrink-0">
                 <CheckCircleIcon
                     class="h-5 w-5 text-green-200"
@@ -47,6 +47,7 @@ export default {
     data() {
         return {
             show: false,
+            msg: "",
         };
     },
     watch: {
@@ -60,6 +61,7 @@ export default {
                     }, 5000);
                 }
             },
+            deep: true,
         },
     },
     mounted() {

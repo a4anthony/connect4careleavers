@@ -71,6 +71,7 @@
                                     v-slot="{ active }"
                                 >
                                     <button
+                                        type="button"
                                         @click="form.publicity = item"
                                         class="p-2 text-left w-full hover:bg-gray-100 block text-gray-500 text-sm font-semibold capitalize"
                                     >

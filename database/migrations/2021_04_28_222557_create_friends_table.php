@@ -19,6 +19,7 @@ class CreateFriendsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('friend_id');
             $table->foreign('friend_id')->references('id')->on('users')->onDelete('cascade');
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

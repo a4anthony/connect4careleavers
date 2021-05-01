@@ -3,11 +3,19 @@
         <form @submit.prevent="submit">
             <div class="flex">
                 <div class="mr-2">
-                    <img
-                        class="h-8 w-8 rounded-full"
-                        :src="$page.props.auth.user.avatar"
-                        alt=""
-                    />
+                    <inertia-link
+                        :href="
+                            route('show.profile', {
+                                username: $page.props.auth.user.username,
+                            })
+                        "
+                    >
+                        <img
+                            class="h-8 w-8 rounded-full"
+                            :src="$page.props.auth.user.avatar"
+                            alt=""
+                        />
+                    </inertia-link>
                 </div>
                 <div class="flex-grow">
                     <div>

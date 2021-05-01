@@ -12,6 +12,8 @@ class Comment extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['liked_by_current_user'];
+
 
     protected static function boot()
     {
@@ -48,6 +50,12 @@ class Comment extends Model
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->diffForHumans();
+    }
+
+
+    public function getLikedByCurrentUserAttribute()
+    {
+        return LikeComment::where([['user_id', request()->user()->id], ['comment_id', $this->attributes['id']]])->exists();
     }
 
 

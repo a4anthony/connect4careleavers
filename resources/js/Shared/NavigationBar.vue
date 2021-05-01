@@ -10,9 +10,9 @@
                         class="flex md:absolute md:left-0 md:inset-y-0 lg:static xl:col-span-3"
                     >
                         <div class="flex-shrink-0 flex items-center">
-                            <a href="#">
+                            <inertia-link href="/">
                                 <logo />
-                            </a>
+                            </inertia-link>
                         </div>
                     </div>
                     <div class="min-w-0 flex-1 md:px-8 lg:px-0 xl:col-span-5">

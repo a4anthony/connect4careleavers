@@ -1,43 +1,35 @@
 <template>
-    <div>
-        <navigation-bar />
-        <alerts />
-        <main class="mt-8" style="min-height: 100vh">
-            <slot></slot>
-        </main>
-        <scroll-to-top />
+    <div class="flex items-center space-x-5">
+        <div class="flex-shrink-0">
+            <div class="relative">
+                <img class="h-16 w-16 rounded-full" :src="user.avatar" alt="" />
+                <span
+                    class="absolute inset-0 shadow-inner rounded-full"
+                    aria-hidden="true"
+                />
+            </div>
+        </div>
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">
+                {{ user.name }}
+            </h1>
+            <p v-if="user.bio" class="text-sm font-medium text-gray-500">
+                {{ user.bio }}
+            </p>
+        </div>
     </div>
 </template>
 
 <script>
-import NavigationBar from "@/Shared/NavigationBar";
-import Alerts from "@/Shared/Alerts";
-import ScrollToTop from "@/Shared/ScrollToTop";
 export default {
-    name: "App",
-    components: { ScrollToTop, Alerts, NavigationBar },
-    data() {
-        return {
-            animate: true,
-            currentPage: "",
-        };
+    name: "ProfileHeader",
+    props: {
+        user: Object,
     },
-    mounted() {},
-    watch: {},
 };
 </script>
 
 <style scoped>
-/* durations and timing functions.*/
-.page-enter-active,
-.page-leave-active {
-    transition: all 1s;
-}
-
-.page-enter,
-.page-leave-active {
-    opacity: 0;
-}
 /* (1366x768) WXGA Display */
 
 @media screen and (min-width: 1366px) and (max-width: 1919px) {

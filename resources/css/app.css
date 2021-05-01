@@ -8,7 +8,7 @@
         @apply focus:outline-none;
     }
     .user-name {
-        @apply text-sm text-blue-800 font-bold;
+        @apply text-sm text-blue-800 hover:text-blue-600 font-bold;
     }
     .time-ago {
         @apply text-xs text-gray-600;
