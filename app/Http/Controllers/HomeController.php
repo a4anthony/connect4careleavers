@@ -20,7 +20,7 @@ class HomeController extends Controller
         foreach ($friendsId as $id) {
             array_push($postIds, $id);
         }
-        $feeds = Post::whereIn('user_id', $postIds)->orWhere('publicity', 'public')->latest()->paginate(5);
+        $feeds = Post::whereIn('user_id', $postIds)->orWhere('publicity', 'public')->latest()->paginate(10);
 
         //dd($feeds->toArray());
         return Inertia::render('Welcome', [
@@ -32,7 +32,7 @@ class HomeController extends Controller
     public function likedPosts()
     {
         $likedPostsId = Like::where('user_id', \request()->user()->id)->get()->pluck('post_id');
-        $feeds = Post::whereIn('id', $likedPostsId)->latest()->paginate(5);
+        $feeds = Post::whereIn('id', $likedPostsId)->latest()->paginate(10);
         return Inertia::render('Welcome', [
             'feeds' => $feeds
         ]);

@@ -33,7 +33,7 @@ class ProfileController extends Controller
 
         return Inertia::render('Profile/Index', [
             'user' => $user,
-            'feeds' => Post::where('user_id', $user->id)->latest()->get(),
+            'feeds' => Post::where('user_id', $user->id)->latest()->paginate(5),
             'currentUser' => \request()->user()->id === $user->id,
             'friends' => $friends,
             'friendRequests' => $friendRequests,

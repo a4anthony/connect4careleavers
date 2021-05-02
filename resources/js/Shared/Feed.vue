@@ -1,7 +1,7 @@
 <template>
     <div>
         <div
-            v-for="feed in feeds"
+            v-for="feed in feeds.data"
             :id="`feed${feed.id}`"
             class="bg-white border rounded-lg mb-4 p-4"
         >
@@ -39,13 +39,7 @@
                     </div>
                 </div>
                 <div v-if="$page.props.auth.user.id === feed.author.id">
-                    <button
-                        type="button"
-                        @click="openModal(feed.id)"
-                        class="text-red-600 hover:text-red-400 flex mt-2"
-                    >
-                        <TrashIcon class="h-5 w-5 text-red-400" />
-                    </button>
+                    <delete-post :feed="feed" />
                 </div>
             </div>
             <div class="border-b-2 my-4 border-b-width-1"></div>
@@ -63,35 +57,14 @@
                 <span class="text-gray-800 text-sm">{{ feed.body }}</span>
             </div>
             <div class="flex items-center justify-between mt-6">
-                <div class="flex mr-2">
-                    <button
-                        @click="unlike(feed.id)"
+                <div class="flex mr-2 items-center">
+                    <!--unlike post-->
+                    <unlike-post
                         v-if="feed.liked_by_current_user"
-                        :disabled="unlikeForm.processing"
-                    >
-                        <HeartIcon
-                            :class="
-                                unlikeForm.processing &&
-                                feed.id === selectedPostId &&
-                                'animate-bounce'
-                            "
-                            class="h-5 w-5 text-red-600 mr-1"
-                        />
-                    </button>
-                    <button
-                        @click="like(feed.id)"
-                        v-else
-                        :disabled="likeForm.processing"
-                    >
-                        <HeartIcon
-                            :class="
-                                likeForm.processing &&
-                                feed.id === selectedPostId &&
-                                'animate-bounce'
-                            "
-                            class="h-5 w-5 text-gray-400 mr-1"
-                        />
-                    </button>
+                        :feed="feed"
+                    />
+                    <!--like post-->
+                    <like-post v-else :feed="feed" />
                 </div>
                 <div class="flex items-center">
                     <div class="flex mr-2">
@@ -111,25 +84,29 @@
                     </div>
                 </div>
             </div>
-            <div class="border-b-2 my-4 border-b-width-1"></div>
-            <div>
-                <comments
-                    :comments="feed.comments"
-                    :post-author-id="feed.author.id"
-                />
-            </div>
-            <div class="mt-4">
-                <add-comment :post-id="feed.id" />
+            <div v-if="!disableComments">
+                <div class="border-b-2 my-4 border-b-width-1"></div>
+                <div>
+                    <comments
+                        :comments="feed.comments"
+                        :post-author-id="feed.author.id"
+                    />
+                </div>
+                <div class="mt-4">
+                    <add-comment :post-id="feed.id" />
+                </div>
             </div>
         </div>
-        <confirm-modal
-            @close="showModal = false"
-            :open="showModal"
-            @confirmed="deletePost"
-            text="Are you sure you want to delete this post?"
-        />
-        <div>
-            <button @click="$emit('next-page')">Next page</button>
+
+        <div class="mt-6" v-if="feeds.data.length !== 0">
+            <pagination
+                :disable-prev="feeds.current_page === 1"
+                :disable-next="feeds.last_page === feeds.current_page"
+                @next="next"
+                @prev="prev"
+                @first="first"
+                @last="last"
+            ></pagination>
         </div>
     </div>
 </template>
@@ -137,77 +114,109 @@
 <script>
 import AddComment from "@/Shared/AddComment";
 import Comments from "@/Shared/Comments";
-const user = {
-    name: "Chelsea Hagon",
-    email: "chelseahagon@example.com",
-    imageUrl:
-        "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
 import { ChatIcon, HeartIcon, TrashIcon } from "@heroicons/vue/solid";
-import ConfirmModal from "@/Shared/ConfirmModal";
+import Pagination from "@/Shared/Pagination";
+import LoadingIcon from "@/Shared/LoadingIcon";
+import LikePost from "@/Components/Post/LikePost";
+import UnlikePost from "@/Components/Post/UnlikePost";
+import DeletePost from "@/Components/Post/DeletePost";
 export default {
     name: "Feed",
     props: {
-        feeds: Array,
+        feeds: Object,
         user: Object,
+        disableComments: {
+            type: Boolean,
+            default: true,
+        },
     },
     components: {
-        ConfirmModal,
+        DeletePost,
+        UnlikePost,
+        LikePost,
+        LoadingIcon,
+        Pagination,
         Comments,
         AddComment,
         ChatIcon,
         HeartIcon,
         TrashIcon,
     },
-    mounted() {
-        // const url =
-        // this.$inertia.get(route("all.post", { username: this.user.username }), {
-        //     onSuccess: (res) => {
-        //         console.log(res);
-        //     },
-        // });
-    },
+
+    mounted() {},
     data() {
         return {
-            form: this.$inertia.form({
-                post_id: "",
-            }),
-            likeForm: this.$inertia.form({
-                post_id: "",
-            }),
-            unlikeForm: this.$inertia.form({
-                post_id: "",
-            }),
-            selectedPostId: null,
-            showModal: false,
+            page: 1,
         };
     },
-
     methods: {
-        like(postId) {
-            this.selectedPostId = postId;
-            this.likeForm.post_id = postId;
-            this.likeForm.post(this.route("like.post"), {
-                preserveScroll: true,
-            });
+        next() {
+            this.$inertia.get(
+                this.route(this.route().current(), {
+                    username: this.user.username,
+                }),
+                { page: this.feeds.current_page + 1 },
+                {
+                    preserveState: true,
+                    onSuccess: () => {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                        });
+                    },
+                }
+            );
         },
-        unlike(postId) {
-            this.selectedPostId = postId;
-            this.unlikeForm.post_id = postId;
-            this.unlikeForm.post(this.route("unlike.post"), {
-                preserveScroll: true,
-            });
+        prev() {
+            this.$inertia.get(
+                this.route(this.route().current(), {
+                    username: this.user.username,
+                }),
+                { page: this.feeds.current_page - 1 },
+                {
+                    preserveState: true,
+                    onSuccess: () => {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                        });
+                    },
+                }
+            );
         },
-        openModal(postId) {
-            this.showModal = true;
-            this.selectedPostId = postId;
+        first() {
+            this.$inertia.get(
+                this.route(this.route().current(), {
+                    username: this.user.username,
+                }),
+                { page: 1 },
+                {
+                    preserveState: true,
+                    onSuccess: () => {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                        });
+                    },
+                }
+            );
         },
-        deletePost() {
-            this.showModal = false;
-            this.form.post_id = this.selectedPostId;
-            this.form.delete(this.route("destroy.post"), {
-                preserveScroll: true,
-            });
+        last() {
+            this.$inertia.get(
+                this.route(this.route().current(), {
+                    username: this.user.username,
+                }),
+                { page: this.feeds.last_page },
+                {
+                    preserveState: true,
+                    onSuccess: () => {
+                        window.scrollTo({
+                            top: 0,
+                            behavior: "smooth",
+                        });
+                    },
+                }
+            );
         },
     },
 };

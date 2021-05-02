@@ -8,11 +8,7 @@
                     <div class="mb-6">
                         <tabs :tabs="tabs" />
                     </div>
-                    <feed
-                        :feeds="posts"
-                        @next-page="nextPage"
-                        :user="$page.props.auth.user"
-                    />
+                    <feed :feeds="feeds" :user="$page.props.auth.user" />
                 </div>
             </div>
         </div>
@@ -138,47 +134,11 @@ export default {
         };
     },
     data() {
-        return {
-            posts: [],
-            page: 1,
-        };
+        return {};
     },
     computed: {},
-    mounted() {
-        console.log("mounted");
-        const postsFromStorage = JSON.parse(localStorage.getItem("homePost"));
-        if (this.feeds.current_page === 1) {
-            localStorage.removeItem("homePost");
-            this.posts = this.feeds.data;
-        } else if (postsFromStorage) {
-            this.posts = postsFromStorage;
-        }
-    },
-    methods: {
-        nextPage() {
-            console.log("here");
-            console.log(this.route().current());
-            this.$inertia.get(
-                this.route(this.route().current()),
-                { page: this.page + 1 },
-                {
-                    replace: false,
-                    preserveScroll: true,
-                    preserveState: true,
-                    onSuccess: (res) => {
-                        this.page = this.feeds.current_page;
-                        res.props.feeds.data.forEach((post) => {
-                            this.posts.push(post);
-                        });
-                        localStorage.setItem(
-                            "homePost",
-                            JSON.stringify(this.posts)
-                        );
-                    },
-                }
-            );
-        },
-    },
+    mounted() {},
+    methods: {},
 };
 </script>
 

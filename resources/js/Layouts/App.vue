@@ -2,10 +2,11 @@
     <div>
         <navigation-bar />
         <alerts />
-        <main class="mt-8 mb-10" style="min-height: 100vh">
+        <main class="mt-8 mb-20" style="min-height: 100vh">
             <slot></slot>
         </main>
         <scroll-to-top />
+        <page-loader :loader="animate" />
     </div>
 </template>
 
@@ -13,17 +14,41 @@
 import NavigationBar from "@/Shared/NavigationBar";
 import Alerts from "@/Shared/Alerts";
 import ScrollToTop from "@/Shared/ScrollToTop";
+import PageLoader from "@/Shared/PageLoader";
 export default {
     name: "App",
-    components: { ScrollToTop, Alerts, NavigationBar },
+    components: { PageLoader, ScrollToTop, Alerts, NavigationBar },
     data() {
         return {
-            animate: true,
+            animate: false,
             currentPage: "",
         };
     },
     mounted() {},
     watch: {},
+    created() {
+        document.addEventListener("inertia:start", this.start);
+        document.addEventListener("inertia:finish", this.finish);
+    },
+    unmounted() {
+        document.removeEventListener("inertia:start", this.start);
+        document.removeEventListener("inertia:finish", this.finish);
+    },
+    methods: {
+        start(e) {
+            if (e.detail.visit.method === "get") {
+                this.animate = true;
+            }
+        },
+        finish(e) {
+            const that = this;
+            if (e.detail.visit.method === "get") {
+                setTimeout(function () {
+                    that.animate = false;
+                }, 100);
+            }
+        },
+    },
 };
 </script>
 

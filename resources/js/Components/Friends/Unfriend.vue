@@ -5,8 +5,14 @@
         @click="openModal(user)"
         class="font-bold inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-400 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-red-500"
     >
-        <UserRemoveIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-        Unfriend
+        <span
+            v-if="!form.processing && !showModal"
+            class="inline-flex items-center justify-center"
+        >
+            <UserRemoveIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
+            Unfriend</span
+        >
+        <loading-icon v-if="showModal || form.processing" />
 
         <confirm-modal
             :open="showModal"
@@ -20,9 +26,11 @@
 <script>
 import ConfirmModal from "@/Shared/ConfirmModal";
 import { UserRemoveIcon } from "@heroicons/vue/outline";
+import LoadingIcon from "@/Shared/LoadingIcon";
 export default {
     name: "Unfriend",
     components: {
+        LoadingIcon,
         ConfirmModal,
         UserRemoveIcon,
     },

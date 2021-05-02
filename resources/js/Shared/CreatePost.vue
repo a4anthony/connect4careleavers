@@ -82,12 +82,18 @@
                         </transition>
                     </Menu>
                     <button
-                        :class="{ 'opacity-25': form.processing }"
+                        :class="{ 'opacity-25': form.body.length === 0 }"
                         :disabled="form.processing || form.body.length === 0"
                         type="submit"
                         class="font-bold inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
-                        Post
+                        <span
+                            v-if="!form.processing"
+                            class="inline-flex items-center justify-center"
+                        >
+                            Post
+                        </span>
+                        <loading-icon v-else />
                     </button>
                 </div>
             </div>
@@ -101,6 +107,7 @@ import { PhotographIcon, EyeIcon, TrashIcon } from "@heroicons/vue/solid";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 import ImageUpload from "@/Shared/ImageUpload";
 import BreezeValidationErrors from "@/Components/ValidationErrors";
+import LoadingIcon from "@/Shared/LoadingIcon";
 const user = {
     name: "Chelsea Hagon",
     email: "chelseahagon@example.com",
@@ -111,6 +118,7 @@ const user = {
 export default {
     name: "CreatePost",
     components: {
+        LoadingIcon,
         ImageUpload,
         Menu,
         MenuButton,

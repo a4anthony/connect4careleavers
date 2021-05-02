@@ -30,7 +30,7 @@
                             </div>
                             <div class="border-b-2 my-4 border-b-width-1"></div>
                             <div class="mt-6">
-                                <feed :feeds="feeds" />
+                                <feed :feeds="feeds" :user="user" />
                             </div>
                         </div>
                         <div
@@ -106,7 +106,7 @@ export default {
     },
     props: {
         user: Object,
-        feeds: Array,
+        feeds: Object,
         currentUser: Boolean,
         friends: Array,
         friendRequests: Array,

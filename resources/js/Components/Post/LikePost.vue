@@ -1,53 +1,48 @@
 <template>
     <button
-        v-if="
-            !currentUser &&
-            !user.current_friend &&
-            !user.request_received &&
-            !user.request_sent
-        "
-        type="button"
+        @click="like(feed.id)"
+        class="flex items-center"
+        v-else
         :disabled="form.processing"
-        @click="addFriend(user)"
-        class="font-bold inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
     >
         <span
-            v-if="!form.processing"
+            v-if="!form.processing && feed.id !== selectedPostId"
             class="inline-flex items-center justify-center"
         >
-            <UserAddIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" /> Add
-            Friend</span
+            <HeartIcon class="h-5 w-5 text-red-600 mr-1"
+        /></span>
+        <span
+            v-if="!form.processing && feed.id === selectedPostId"
+            class="inline-flex items-center justify-center"
         >
-        <loading-icon v-else />
+            <HeartIcon class="h-5 w-5 text-red-600 mr-1"
+        /></span>
+        <loading-icon v-if="form.processing && feed.id === selectedPostId" />
     </button>
 </template>
 
 <script>
-import { UserAddIcon, RefreshIcon } from "@heroicons/vue/outline";
 import LoadingIcon from "@/Shared/LoadingIcon";
-
+import { HeartIcon } from "@heroicons/vue/outline";
 export default {
-    name: "AddFriend",
-    components: {
-        LoadingIcon,
-        UserAddIcon,
-        RefreshIcon,
-    },
+    name: "LikePost",
+    components: { LoadingIcon, HeartIcon },
     props: {
-        user: Object,
-        currentUser: Boolean,
+        feed: Object,
     },
     data() {
         return {
             form: this.$inertia.form({
-                friend_id: "",
+                post_id: "",
             }),
+            selectedPostId: null,
         };
     },
     methods: {
-        addFriend(friend) {
-            this.form.friend_id = friend.id;
-            this.form.post(this.route("addFriend.friend"), {
+        like(postId) {
+            this.selectedPostId = postId;
+            this.form.post_id = postId;
+            this.form.post(this.route("like.post"), {
                 preserveScroll: true,
             });
         },

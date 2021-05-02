@@ -3,19 +3,28 @@
         v-if="user.request_sent"
         type="button"
         @click="cancelRequest(user)"
+        :disabled="form.processing"
         class="font-bold inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
     >
-        <UserRemoveIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-        Cancel Request
+        <span
+            v-if="!form.processing"
+            class="inline-flex items-center justify-center"
+        >
+            <UserRemoveIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
+            Cancel Request</span
+        >
+        <loading-icon v-else />
     </button>
 </template>
 
 <script>
 import { UserRemoveIcon } from "@heroicons/vue/outline/esm";
+import LoadingIcon from "@/Shared/LoadingIcon";
 
 export default {
     name: "CancelRequest",
     components: {
+        LoadingIcon,
         UserRemoveIcon,
     },
     props: {
