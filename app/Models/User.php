@@ -99,4 +99,9 @@ class User extends Authenticatable
         ])->exists();
     }
 
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
 }

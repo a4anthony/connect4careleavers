@@ -77,4 +77,11 @@ Route::post('/friends/remove', [\App\Http\Controllers\FriendController::class, '
     ->middleware(['auth', 'verified'])->name('unfriend.friend');
 
 
+//MESSAGES
+Route::get('/messages', [\App\Http\Controllers\ChatsController::class, 'index'])
+    ->middleware(['auth', 'verified'])->name('messages');
+Route::get('/messages/fetch', [\App\Http\Controllers\ChatsController::class, 'fetch'])
+    ->middleware(['auth', 'verified'])->name('fetch.messages');
+Route::post('/messages/send', [\App\Http\Controllers\ChatsController::class, 'send'])
+    ->middleware(['auth', 'verified'])->name('send.messages');
 require __DIR__ . '/auth.php';
