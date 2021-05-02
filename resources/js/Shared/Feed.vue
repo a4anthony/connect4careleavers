@@ -128,6 +128,9 @@
             @confirmed="deletePost"
             text="Are you sure you want to delete this post?"
         />
+        <div>
+            <button @click="$emit('next-page')">Next page</button>
+        </div>
     </div>
 </template>
 
@@ -146,6 +149,7 @@ export default {
     name: "Feed",
     props: {
         feeds: Array,
+        user: Object,
     },
     components: {
         ConfirmModal,
@@ -155,12 +159,14 @@ export default {
         HeartIcon,
         TrashIcon,
     },
-    setup() {
-        return {
-            user,
-        };
+    mounted() {
+        // const url =
+        // this.$inertia.get(route("all.post", { username: this.user.username }), {
+        //     onSuccess: (res) => {
+        //         console.log(res);
+        //     },
+        // });
     },
-    mounted() {},
     data() {
         return {
             form: this.$inertia.form({

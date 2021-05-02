@@ -12,7 +12,6 @@ class HomeController extends Controller
 {
     public function all()
     {
-        //dd(Post::find(1));
 
         $user = \request()->user();
         $postIds = [];
@@ -21,10 +20,11 @@ class HomeController extends Controller
         foreach ($friendsId as $id) {
             array_push($postIds, $id);
         }
-        $publicFeeds = Post::where('publicity', 'public')->latest()->get();
-        $feeds = Post::whereIn('user_id', $postIds)->latest()->get();
+        $feeds = Post::whereIn('user_id', $postIds)->orWhere('publicity', 'public')->latest()->paginate(5);
+
+        //dd($feeds->toArray());
         return Inertia::render('Welcome', [
-            'feeds' => $feeds->merge($publicFeeds)
+            'feeds' => $feeds
         ]);
     }
 

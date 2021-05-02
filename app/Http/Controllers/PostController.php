@@ -4,11 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Like;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
 class PostController extends Controller
 {
+    public function all($username)
+    {
+        $user = User::where('username', $username)->first();
+        $postIds = [];
+        array_push($postIds, $user->id);
+        $friendsId = $user->friends()->pluck('friend_id');
+        foreach ($friendsId as $id) {
+            array_push($postIds, $id);
+        }
+        $feeds = Post::whereIn('user_id', $postIds)->orWhere('publicity', 'public')->latest()->paginate(5);
+        return response()->json($feeds);
+    }
+
     public function store()
     {
         $randKey = Carbon::now()->format('_dnygis');

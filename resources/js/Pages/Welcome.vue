@@ -8,7 +8,11 @@
                     <div class="mb-6">
                         <tabs :tabs="tabs" />
                     </div>
-                    <feed :feeds="feeds" />
+                    <feed
+                        :feeds="posts"
+                        @next-page="nextPage"
+                        :user="$page.props.auth.user"
+                    />
                 </div>
             </div>
         </div>
@@ -125,10 +129,7 @@ export default {
     layout: App,
     props: {
         auth: Object,
-        feeds: Array,
-    },
-    mounted() {
-        console.log(this.$page.props);
+        feeds: Object,
     },
     setup() {
         return {
@@ -137,7 +138,61 @@ export default {
         };
     },
     data() {
-        return {};
+        return {
+            posts: [],
+            page: 1,
+        };
+    },
+    computed: {
+        postsFromStorage() {
+            // console.log(localStorage.getItem("homePost"));
+            const postsFromStorage = localStorage.getItem("homePost");
+            console.log(JSON.parse(postsFromStorage));
+            return JSON.parse(postsFromStorage);
+        },
+    },
+    mounted() {
+        console.log("mounted");
+        // console.log(localStorage.getItem("homePost"));
+        console.log(this.postsFromStorage);
+        const postsFromStorage = localStorage.getItem("homePost");
+        // console.log(JSON.parse(postsFromStorage));
+        if (this.feeds.current_page === 1) {
+            localStorage.removeItem("homePost");
+            this.posts = this.feeds.data;
+        } else if (postsFromStorage) {
+            console.log(JSON.parse(postsFromStorage));
+            this.posts = JSON.parse(postsFromStorage);
+        }
+
+        this.page = this.feeds.current_page;
+
+        // this.posts = this.feeds.data;
+        // this.page = 2;
+        // localStorage.setItem("homePost", JSON.stringify(this.posts));
+    },
+    methods: {
+        nextPage() {
+            console.log("here");
+            this.$inertia.get(
+                this.route("home"),
+                { page: this.page + 1 },
+                {
+                    replace: true,
+                    preserveScroll: true,
+                    preserveState: true,
+                    onSuccess: (res) => {
+                        res.props.feeds.data.forEach((post) => {
+                            this.posts.push(post);
+                        });
+                        localStorage.setItem(
+                            "homePost",
+                            JSON.stringify(this.posts)
+                        );
+                    },
+                }
+            );
+        },
     },
 };
 </script>

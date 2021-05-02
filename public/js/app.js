@@ -37890,10 +37890,7 @@ var tabs = [{
   layout: _Layouts_App__WEBPACK_IMPORTED_MODULE_1__.default,
   props: {
     auth: Object,
-    feeds: Array
-  },
-  mounted: function mounted() {
-    console.log(this.$page.props);
+    feeds: Object
   },
   setup: function setup() {
     return {
@@ -37902,7 +37899,56 @@ var tabs = [{
     };
   },
   data: function data() {
-    return {};
+    return {
+      posts: [],
+      page: 1
+    };
+  },
+  computed: {
+    postsFromStorage: function postsFromStorage() {
+      // console.log(localStorage.getItem("homePost"));
+      var postsFromStorage = localStorage.getItem("homePost");
+      console.log(JSON.parse(postsFromStorage));
+      return JSON.parse(postsFromStorage);
+    }
+  },
+  mounted: function mounted() {
+    console.log("mounted"); // console.log(localStorage.getItem("homePost"));
+
+    console.log(this.postsFromStorage);
+    var postsFromStorage = localStorage.getItem("homePost"); // console.log(JSON.parse(postsFromStorage));
+
+    if (this.feeds.current_page === 1) {
+      localStorage.removeItem("homePost");
+      this.posts = this.feeds.data;
+    } else if (postsFromStorage) {
+      console.log(JSON.parse(postsFromStorage));
+      this.posts = JSON.parse(postsFromStorage);
+    }
+
+    this.page = this.feeds.current_page; // this.posts = this.feeds.data;
+    // this.page = 2;
+    // localStorage.setItem("homePost", JSON.stringify(this.posts));
+  },
+  methods: {
+    nextPage: function nextPage() {
+      var _this = this;
+
+      console.log("here");
+      this.$inertia.get(this.route("home"), {
+        page: this.page + 1
+      }, {
+        replace: true,
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: function onSuccess(res) {
+          res.props.feeds.data.forEach(function (post) {
+            _this.posts.push(post);
+          });
+          localStorage.setItem("homePost", JSON.stringify(_this.posts));
+        }
+      });
+    }
   }
 });
 
@@ -38271,7 +38317,8 @@ var user = {
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Feed",
   props: {
-    feeds: Array
+    feeds: Array,
+    user: Object
   },
   components: {
     ConfirmModal: _Shared_ConfirmModal__WEBPACK_IMPORTED_MODULE_3__.default,
@@ -38281,12 +38328,13 @@ var user = {
     HeartIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_2__.HeartIcon,
     TrashIcon: _heroicons_vue_solid__WEBPACK_IMPORTED_MODULE_2__.TrashIcon
   },
-  setup: function setup() {
-    return {
-      user: user
-    };
+  mounted: function mounted() {// const url =
+    // this.$inertia.get(route("all.post", { username: this.user.username }), {
+    //     onSuccess: (res) => {
+    //         console.log(res);
+    //     },
+    // });
   },
-  mounted: function mounted() {},
   data: function data() {
     return {
       form: this.$inertia.form({
@@ -41125,10 +41173,12 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   }, null, 8
   /* PROPS */
   , ["tabs"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_feed, {
-    feeds: $props.feeds
+    feeds: $data.posts,
+    onNextPage: $options.nextPage,
+    user: _ctx.$page.props.auth.user
   }, null, 8
   /* PROPS */
-  , ["feeds"])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
+  , ["feeds", "onNextPage", "user"])])])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_9, [_hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_12, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_inertia_link, {
     href: _ctx.route('show.profile', {
       username: _ctx.$page.props.auth.user.username
     })
@@ -42124,7 +42174,11 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     text: "Are you sure you want to delete this post?"
   }, null, 8
   /* PROPS */
-  , ["open", "onConfirmed"])]);
+  , ["open", "onConfirmed"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return _ctx.$emit('next-page');
+    })
+  }, "Next page")])]);
 });
 
 /***/ }),
