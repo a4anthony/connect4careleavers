@@ -3,18 +3,23 @@
 namespace App\Http\Controllers;
 
 use App\Events\MessageSent;
+use App\Models\Friend;
 use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ChatsController extends Controller
 {
-    public function index()
+    public function index($friendUsername)
     {
+        //dd($friendUsername);
         $user = request()->user();
-        //dd($user->messages);
+
         return Inertia::render('Messages/Index', [
-            'messages' => $user->messages
+            'messages' => $user->messages,
+            'friend' => $user,
+            'user' => \request()->user()
         ]);
     }
 
@@ -35,7 +40,6 @@ class ChatsController extends Controller
 
 
         //event(new MessageSent($user, $message));
-
 
 
         //broadcast(new MessageSent($user, $message))->toOthers();

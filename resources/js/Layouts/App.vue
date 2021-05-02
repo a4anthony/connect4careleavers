@@ -2,7 +2,11 @@
     <div>
         <navigation-bar />
         <alerts />
-        <main class="mt-8 mb-20" style="min-height: 100vh">
+        <main
+            class="mt-8 mb-20"
+            :class="{ 'absolute top-24 bottom-0 left-0 right-0': onMessages }"
+            :style="!onMessages ? { minHeight: '100vh' } : {}"
+        >
             <slot></slot>
         </main>
         <scroll-to-top />
@@ -23,6 +27,11 @@ export default {
             animate: false,
             currentPage: "",
         };
+    },
+    computed: {
+        onMessages() {
+            return this.route().current() === "messages";
+        },
     },
     mounted() {},
     watch: {},

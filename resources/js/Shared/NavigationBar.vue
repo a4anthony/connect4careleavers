@@ -50,12 +50,12 @@
                         >
                             <UsersIcon class="h-6 w-6 p-1" aria-hidden="true" />
                         </a>
-                        <a
-                            href="#"
+                        <button
+                            @click="friendOverlay = true"
                             class="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                             <MailIcon class="h-6 w-6 p-1" aria-hidden="true" />
-                        </a>
+                        </button>
                         <a
                             href="#"
                             class="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -165,6 +165,8 @@ import {
 } from "@heroicons/vue/solid";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/vue/outline";
 import Logo from "@/Shared/Logo";
+import Friends from "@/Components/Chat/Friends";
+import Button from "@/Components/Button";
 
 const user = {
     name: "Chelsea Hagon",
@@ -193,6 +195,8 @@ const userNavigation = [
 export default {
     name: "NavigationBar",
     components: {
+        Button,
+        Friends,
         Logo,
         Menu,
         MenuButton,
@@ -214,6 +218,11 @@ export default {
             user,
             navigation,
             userNavigation,
+        };
+    },
+    data() {
+        return {
+            friendOverlay: true,
         };
     },
 };

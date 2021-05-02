@@ -78,7 +78,7 @@ Route::post('/friends/remove', [\App\Http\Controllers\FriendController::class, '
 
 
 //MESSAGES
-Route::get('/messages', [\App\Http\Controllers\ChatsController::class, 'index'])
+Route::get('/messages/{friendUsername}', [\App\Http\Controllers\ChatsController::class, 'index'])
     ->middleware(['auth', 'verified'])->name('messages');
 Route::get('/messages/fetch', [\App\Http\Controllers\ChatsController::class, 'fetch'])
     ->middleware(['auth', 'verified'])->name('fetch.messages');

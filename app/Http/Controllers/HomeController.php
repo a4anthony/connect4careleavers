@@ -22,7 +22,6 @@ class HomeController extends Controller
         }
         $feeds = Post::whereIn('user_id', $postIds)->orWhere('publicity', 'public')->latest()->paginate(10);
 
-        //dd($feeds->toArray());
         return Inertia::render('Welcome', [
             'feeds' => $feeds
         ]);
