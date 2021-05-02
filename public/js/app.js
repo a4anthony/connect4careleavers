@@ -37904,44 +37904,32 @@ var tabs = [{
       page: 1
     };
   },
-  computed: {
-    postsFromStorage: function postsFromStorage() {
-      // console.log(localStorage.getItem("homePost"));
-      var postsFromStorage = localStorage.getItem("homePost");
-      console.log(JSON.parse(postsFromStorage));
-      return JSON.parse(postsFromStorage);
-    }
-  },
+  computed: {},
   mounted: function mounted() {
-    console.log("mounted"); // console.log(localStorage.getItem("homePost"));
-
-    console.log(this.postsFromStorage);
-    var postsFromStorage = localStorage.getItem("homePost"); // console.log(JSON.parse(postsFromStorage));
+    console.log("mounted");
+    var postsFromStorage = JSON.parse(localStorage.getItem("homePost"));
 
     if (this.feeds.current_page === 1) {
       localStorage.removeItem("homePost");
       this.posts = this.feeds.data;
     } else if (postsFromStorage) {
-      console.log(JSON.parse(postsFromStorage));
-      this.posts = JSON.parse(postsFromStorage);
+      this.posts = postsFromStorage;
     }
-
-    this.page = this.feeds.current_page; // this.posts = this.feeds.data;
-    // this.page = 2;
-    // localStorage.setItem("homePost", JSON.stringify(this.posts));
   },
   methods: {
     nextPage: function nextPage() {
       var _this = this;
 
       console.log("here");
-      this.$inertia.get(this.route("home"), {
+      console.log(this.route().current());
+      this.$inertia.get(this.route(this.route().current()), {
         page: this.page + 1
       }, {
-        replace: true,
+        replace: false,
         preserveScroll: true,
         preserveState: true,
         onSuccess: function onSuccess(res) {
+          _this.page = _this.feeds.current_page;
           res.props.feeds.data.forEach(function (post) {
             _this.posts.push(post);
           });

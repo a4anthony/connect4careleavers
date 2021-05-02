@@ -32,9 +32,9 @@ class HomeController extends Controller
     public function likedPosts()
     {
         $likedPostsId = Like::where('user_id', \request()->user()->id)->get()->pluck('post_id');
-        $feeds = Post::whereIn('id', $likedPostsId)->latest()->get();
+        $feeds = Post::whereIn('id', $likedPostsId)->latest()->paginate(5);
         return Inertia::render('Welcome', [
-            'feeds' => $feeds->merge($feeds)
+            'feeds' => $feeds
         ]);
     }
 }

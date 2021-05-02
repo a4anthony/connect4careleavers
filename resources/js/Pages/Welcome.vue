@@ -143,45 +143,30 @@ export default {
             page: 1,
         };
     },
-    computed: {
-        postsFromStorage() {
-            // console.log(localStorage.getItem("homePost"));
-            const postsFromStorage = localStorage.getItem("homePost");
-            console.log(JSON.parse(postsFromStorage));
-            return JSON.parse(postsFromStorage);
-        },
-    },
+    computed: {},
     mounted() {
         console.log("mounted");
-        // console.log(localStorage.getItem("homePost"));
-        console.log(this.postsFromStorage);
-        const postsFromStorage = localStorage.getItem("homePost");
-        // console.log(JSON.parse(postsFromStorage));
+        const postsFromStorage = JSON.parse(localStorage.getItem("homePost"));
         if (this.feeds.current_page === 1) {
             localStorage.removeItem("homePost");
             this.posts = this.feeds.data;
         } else if (postsFromStorage) {
-            console.log(JSON.parse(postsFromStorage));
-            this.posts = JSON.parse(postsFromStorage);
+            this.posts = postsFromStorage;
         }
-
-        this.page = this.feeds.current_page;
-
-        // this.posts = this.feeds.data;
-        // this.page = 2;
-        // localStorage.setItem("homePost", JSON.stringify(this.posts));
     },
     methods: {
         nextPage() {
             console.log("here");
+            console.log(this.route().current());
             this.$inertia.get(
-                this.route("home"),
+                this.route(this.route().current()),
                 { page: this.page + 1 },
                 {
-                    replace: true,
+                    replace: false,
                     preserveScroll: true,
                     preserveState: true,
                     onSuccess: (res) => {
+                        this.page = this.feeds.current_page;
                         res.props.feeds.data.forEach((post) => {
                             this.posts.push(post);
                         });
