@@ -11,10 +11,8 @@
                 </div>
             </div>
 
-            <div
-                class="mt-8 px-3 max-w-3xl mx-auto grid grid-cols-1 gap-6 lg:max-w-7xl lg:grid-flow-col-dense lg:grid-cols-3"
-            >
-                <div class="space-y-6 lg:col-start-1 lg:col-span-2">
+            <div class="mt-8 px-3 flex flex-wrap-reverse lg:flex-nowrap">
+                <div class="mr-0 lg:mr-8 flex-grow">
                     <div class="bg-white shadow rounded-lg p-4">
                         <profile-nav :tabs="tabs" :user="user" />
                     </div>
@@ -75,8 +73,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="lg:col-start-3 lg:col-span-1">
-                    <div class="bg-white shadow rounded-lg p-4">side</div>
+                <div class="w-full lg:w-1/3 mb-4 lg:mb-0 flex-none">
+                    <div class="bg-white shadow rounded-lg p-4">
+                        <profile-about :user="user" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,9 +91,11 @@ import ProfileNav from "@/Components/Profile/ProfileNav";
 import Feed from "@/Shared/Feed";
 import CreatePost from "@/Shared/CreatePost";
 import ProfileFriends from "@/Components/Profile/ProfileFriends";
+import ProfileAbout from "@/Components/Profile/ProfileAbout";
 
 export default {
     components: {
+        ProfileAbout,
         ProfileFriends,
         CreatePost,
         Feed,

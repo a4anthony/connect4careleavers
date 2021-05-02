@@ -40,9 +40,11 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function tabs()
+    public function edit()
     {
-
+        return Inertia::render('Profile/Edit', [
+            'user' => \request()->user(),
+        ]);
     }
 
 }

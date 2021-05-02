@@ -58,6 +58,8 @@ Route::get('/profile/{username}', [\App\Http\Controllers\ProfileController::clas
     ->middleware(['auth', 'verified'])->name('show.profile');
 Route::get('/profile/{username}/friends', [\App\Http\Controllers\ProfileController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('show.profile.friends');
+Route::get('/profile/{username}/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])
+    ->middleware(['auth', 'verified'])->name('edit.profile');
 Route::get('/profile/{username}/friends/requests', [\App\Http\Controllers\ProfileController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('show.profile.friends.request');
 Route::get('/profile/{username}/about', [\App\Http\Controllers\ProfileController::class, 'show'])
