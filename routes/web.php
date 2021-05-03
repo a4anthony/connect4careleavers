@@ -30,6 +30,9 @@ Route::get('/dashboard', function () {
 Route::get('/post/{username}', [\App\Http\Controllers\PostController::class, 'all'])
     ->middleware(['auth', 'verified'])->name('all.post');
 
+Route::get('/post/{username}/{postId}', [\App\Http\Controllers\PostController::class, 'show'])
+    ->middleware(['auth', 'verified'])->name('show.post');
+
 Route::post('/post', [\App\Http\Controllers\PostController::class, 'store'])
     ->middleware(['auth', 'verified'])->name('store.post');
 
@@ -63,6 +66,8 @@ Route::get('/profile/{username}/friends', [\App\Http\Controllers\ProfileControll
     ->middleware(['auth', 'verified'])->name('show.profile.friends');
 Route::get('/profile/{username}/edit', [\App\Http\Controllers\ProfileController::class, 'edit'])
     ->middleware(['auth', 'verified'])->name('edit.profile');
+Route::post('/profile/{username}/edit', [\App\Http\Controllers\ProfileController::class, 'update'])
+    ->middleware(['auth', 'verified'])->name('update.profile');
 Route::get('/profile/{username}/friends/requests', [\App\Http\Controllers\ProfileController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('show.profile.friends.request');
 Route::get('/profile/{username}/about', [\App\Http\Controllers\ProfileController::class, 'show'])
@@ -84,4 +89,14 @@ Route::get('/messages/fetch', [\App\Http\Controllers\ChatsController::class, 'fe
     ->middleware(['auth', 'verified'])->name('fetch.messages');
 Route::post('/messages/send', [\App\Http\Controllers\ChatsController::class, 'send'])
     ->middleware(['auth', 'verified'])->name('send.messages');
+
+
+//SEARCH
+Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search'])
+    ->middleware(['auth', 'verified'])->name('search');
+
+//JOBS
+Route::get('/jobs', [\App\Http\Controllers\JobController::class, 'all'])
+    ->middleware(['auth', 'verified'])->name('all.jobs');
+
 require __DIR__ . '/auth.php';

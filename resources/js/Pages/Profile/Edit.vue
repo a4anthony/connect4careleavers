@@ -16,6 +16,7 @@
                                 >
                                     Profile
                                 </h3>
+
                                 <p class="mt-1 max-w-2xl text-sm text-gray-500">
                                     This information will be displayed publicly
                                     so be careful what you share.
@@ -180,11 +181,17 @@
                                             id="country"
                                             name="country"
                                             autocomplete="country"
+                                            v-model="form.country"
                                             class="max-w-lg block focus:ring-indigo-500 focus:border-indigo-500 w-full shadow-sm sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
                                         >
-                                            <option>United States</option>
-                                            <option>Canada</option>
-                                            <option>Mexico</option>
+                                            <option
+                                                v-for="(
+                                                    country, index
+                                                ) in countries"
+                                                :key="index"
+                                            >
+                                                {{ country }}
+                                            </option>
                                         </select>
                                     </div>
                                 </div>
@@ -216,9 +223,13 @@
                         <div class="flex justify-end">
                             <button
                                 type="submit"
+                                :disabled="form.processing"
                                 class="font-bold ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
-                                Save Changes
+                                <span v-if="!form.processing">
+                                    Save Changes
+                                </span>
+                                <loading-icon v-else />
                             </button>
                         </div>
                     </div>
@@ -232,14 +243,16 @@
 <script>
 import App from "@/Layouts/App";
 import ImageUpload from "@/Shared/ImageUpload";
+import LoadingIcon from "@/Shared/LoadingIcon";
 export default {
     name: "Edit",
-    components: { ImageUpload, App },
+    components: { LoadingIcon, ImageUpload, App },
     props: {
         user: Object,
+        countries: Array,
     },
     mounted() {
-        this.form = {
+        this.form = this.$inertia.form({
             name: this.user.name,
             username: this.user.username,
             email: this.user.email,
@@ -248,7 +261,7 @@ export default {
             city: this.user.city,
             country: this.user.country,
             avatar: this.user.avatar,
-        };
+        });
     },
     data() {
         return {
@@ -271,7 +284,26 @@ export default {
             this.imgSrc = img;
         },
         submit() {
-            console.log(this.form);
+            if (!this.form.name) {
+                this.form.name = this.user.name;
+            }
+            if (!this.form.username) {
+                this.form.username = this.user.username;
+            }
+            if (!this.form.email) {
+                this.form.email = this.user.email;
+            }
+            if (!this.form.avatar) {
+                this.form.avatar = this.user.avatar;
+            }
+            this.form.post(
+                this.route("update.profile", { username: this.user.username }),
+                {
+                    onFinish: () => {
+                        this.form.reset("processing");
+                    },
+                }
+            );
         },
     },
 };

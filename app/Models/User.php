@@ -22,6 +22,11 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'bio',
+        'website',
+        'country',
+        'city',
+        'avatar',
     ];
 
     protected $appends = ['current_friend', 'request_received', 'request_sent'];

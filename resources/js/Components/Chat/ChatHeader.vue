@@ -25,9 +25,6 @@
             >
                 {{ friend.username }}
             </inertia-link>
-            <!--<span class="block text-xs text-gray-700">-->
-            <!--    {{ feed.created_at }}-->
-            <!--</span>-->
         </div>
     </div>
 </template>

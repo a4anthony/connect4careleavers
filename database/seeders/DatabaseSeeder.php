@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LikeSeeder::class);
         $this->call(LikeCommentSeeder::class);
         $this->call(MessageSeeder::class);
+        $this->call(JobSeeder::class);
         // \App\Models\User::factory(10)->create();
     }
 }

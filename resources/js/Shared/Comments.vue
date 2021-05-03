@@ -31,34 +31,11 @@
                 </span>
                 <div class="mt-2 flex items-center">
                     <div class="mr-2 flex items-center">
-                        <button
-                            @click="unlike(comment.id)"
+                        <unlike-comment
                             v-if="comment.liked_by_current_user"
-                            :disabled="unlikeForm.processing"
-                        >
-                            <HeartIcon
-                                :class="
-                                    unlikeForm.processing &&
-                                    comment.id === selectedCommentId &&
-                                    'animate-bounce'
-                                "
-                                class="h-5 w-5 text-red-600 mr-1"
-                            />
-                        </button>
-                        <button
-                            @click="like(comment.id)"
-                            v-else
-                            :disabled="likeForm.processing"
-                        >
-                            <HeartIcon
-                                :class="
-                                    likeForm.processing &&
-                                    comment.id === selectedCommentId &&
-                                    'animate-bounce'
-                                "
-                                class="h-5 w-5 text-gray-400 mr-1"
-                            />
-                        </button>
+                            :comment="comment"
+                        />
+                        <like-comment v-else :comment="comment" />
                     </div>
                     {{ "-" }}
                     <div class="ml-2 mr-2">
@@ -83,42 +60,26 @@
                         "
                     >
                         {{ "-" }}
-                        <button
-                            type="button"
-                            @click="openModal(comment.id)"
-                            class="ml-2 text-red-600 hover:text-red-400 flex"
-                        >
-                            <TrashIcon class="h-5 w-5 text-red-400" />
-                        </button>
+                        <delete-comment :comment="comment" />
                     </div>
                 </div>
             </div>
-        </div>
-        <div>
-            <confirm-modal
-                @close="showModal = false"
-                :open="showModal"
-                @confirmed="deleteComment"
-                text="Are you sure you want to delete this comment?"
-            />
         </div>
     </div>
 </template>
 
 <script>
 import { TrashIcon, HeartIcon } from "@heroicons/vue/solid/esm";
-import ConfirmModal from "@/Shared/ConfirmModal";
+import UnlikeComment from "@/Components/Comment/UnlikeComment";
+import LikeComment from "@/Components/Comment/LikeComment";
+import DeleteComment from "@/Components/Comment/DeleteComment";
 
-const user = {
-    name: "Chelsea Hagon",
-    email: "chelseahagon@example.com",
-    imageUrl:
-        "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
 export default {
     name: "Comments",
     components: {
-        ConfirmModal,
+        DeleteComment,
+        LikeComment,
+        UnlikeComment,
         TrashIcon,
         HeartIcon,
     },
@@ -126,53 +87,10 @@ export default {
         comments: Array,
         postAuthorId: Number,
     },
-    setup() {
-        return {
-            user,
-        };
-    },
     data() {
-        return {
-            showModal: false,
-            selectedCommentId: null,
-            form: this.$inertia.form({
-                comment_id: "",
-            }),
-            likeForm: this.$inertia.form({
-                comment_id: "",
-            }),
-            unlikeForm: this.$inertia.form({
-                comment_id: "",
-            }),
-        };
+        return {};
     },
-    methods: {
-        like(commentId) {
-            this.selectedCommentId = commentId;
-            this.likeForm.comment_id = commentId;
-            this.likeForm.post(this.route("like.comment"), {
-                preserveScroll: true,
-            });
-        },
-        unlike(commentId) {
-            this.selectedPostId = commentId;
-            this.unlikeForm.comment_id = commentId;
-            this.unlikeForm.post(this.route("unlike.comment"), {
-                preserveScroll: true,
-            });
-        },
-        openModal(commentId) {
-            this.showModal = true;
-            this.selectedCommentId = commentId;
-        },
-        deleteComment() {
-            this.showModal = false;
-            this.form.comment_id = this.selectedCommentId;
-            this.form.delete(this.route("destroy.comment"), {
-                preserveScroll: true,
-            });
-        },
-    },
+    methods: {},
 };
 </script>
 

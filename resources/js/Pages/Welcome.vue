@@ -36,6 +36,11 @@
                             </inertia-link>
                         </div>
                         <div>
+                            <h3
+                                class="text-gray-900 text-sm font-medium truncate"
+                            >
+                                {{ $page.props.auth.user.name }}
+                            </h3>
                             <inertia-link
                                 class="block user-name"
                                 :href="
@@ -51,7 +56,12 @@
                             <span class="block">
                                 <inertia-link
                                     class="text-sm text-gray-600 font-semibold hover:text-gray-400"
-                                    href="/edit"
+                                    :href="
+                                        route('edit.profile', {
+                                            username:
+                                                $page.props.auth.user.username,
+                                        })
+                                    "
                                     >Edit profile</inertia-link
                                 >
                             </span>
@@ -67,21 +77,30 @@
                     </div>
                     <div class="p-4">
                         <ul>
-                            <li v-for="job in 5" class="my-1">
+                            <li
+                                v-for="job in jobs"
+                                :key="`job${job.id}`"
+                                class="my-1"
+                            >
                                 <a
-                                    href="/"
-                                    class="d-block w-full text-sm text-blue-800 text-blue-600"
-                                    >Job {{ job }}</a
+                                    :href="job.url"
+                                    class="font-semibold inline-flex items-center w-full text-sm text-gray-800 hover:text-gray-600"
                                 >
+                                    <ChevronRightIcon
+                                        class="w-6 h-6 font-bold mr-2"
+                                    />
+                                    <h3 class="truncate">{{ job.title }}</h3>
+                                </a>
                             </li>
                         </ul>
                         <div class="text-center mt-3">
-                            <button
+                            <inertia-link
+                                :href="route('all.jobs')"
                                 type="button"
                                 class="font-bold inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
                                 View all
-                            </button>
+                            </inertia-link>
                         </div>
                     </div>
                 </div>
@@ -98,17 +117,13 @@
 
 <script>
 import CreatePost from "@/Shared/CreatePost";
-const user = {
-    name: "Chelsea Hagon",
-    email: "chelseahagon@example.com",
-    imageUrl:
-        "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-};
+
 import App from "@/Layouts/App";
 import Feed from "@/Shared/Feed";
 import Alerts from "@/Shared/Alerts";
 import Tabs from "@/Shared/Tabs";
 
+import { ChevronRightIcon } from "@heroicons/vue/outline";
 const tabs = [
     {
         name: "Your Feed",
@@ -121,15 +136,15 @@ const tabs = [
 ];
 
 export default {
-    components: { Tabs, Alerts, Feed, CreatePost },
+    components: { Tabs, Alerts, Feed, CreatePost, ChevronRightIcon },
     layout: App,
     props: {
         auth: Object,
         feeds: Object,
+        jobs: Array,
     },
     setup() {
         return {
-            user,
             tabs,
         };
     },

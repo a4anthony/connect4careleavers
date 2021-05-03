@@ -1,47 +1,49 @@
 <template>
     <button
-        v-if="user.request_received"
-        type="button"
-        @click="confirmFriend(user)"
+        @click="like(comment.id)"
+        class="flex items-center"
         :disabled="form.processing"
-        class="font-bold inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
     >
         <span
-            v-if="!form.processing"
+            v-if="!form.processing && comment.id !== selectedCommentId"
             class="inline-flex items-center justify-center"
         >
-            <UserAddIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-            Confirm Request</span
+            <HeartIcon class="h-5 w-5 text-red-700"
+        /></span>
+        <span
+            v-if="!form.processing && comment.id === selectedCommentId"
+            class="inline-flex items-center justify-center"
         >
-        <loading-icon v-else />
+            <HeartIcon class="h-5 w-5 text-red-700"
+        /></span>
+        <loading-icon
+            v-if="form.processing && comment.id === selectedCommentId"
+        />
     </button>
 </template>
 
 <script>
-import { UserAddIcon } from "@heroicons/vue/outline/esm";
 import LoadingIcon from "@/Shared/LoadingIcon";
-
+import { HeartIcon } from "@heroicons/vue/solid";
 export default {
-    name: "ConfirmRequest",
-    components: {
-        LoadingIcon,
-        UserAddIcon,
-    },
+    name: "UnlikeComment",
+    components: { LoadingIcon, HeartIcon },
     props: {
-        user: Object,
-        currentUser: Boolean,
+        comment: Object,
     },
     data() {
         return {
             form: this.$inertia.form({
-                friend_id: "",
+                comment_id: "",
             }),
+            selectedCommentId: null,
         };
     },
     methods: {
-        confirmFriend(friend) {
-            this.form.friend_id = friend.id;
-            this.form.post(this.route("confirm.friend"), {
+        like(commentId) {
+            this.selectedCommentId = commentId;
+            this.form.comment_id = commentId;
+            this.form.post(this.route("unlike.comment"), {
                 preserveScroll: true,
             });
         },

@@ -10,7 +10,10 @@ class FriendController extends Controller
     public function confirm()
     {
         $req = Friend::where([
-            ['user_id', \request('user_id')],
+            ['user_id', \request()->user()->id],
+            ['friend_id', \request('friend_id')]
+        ])->orWhere([
+            ['user_id', \request('friend_id')],
             ['friend_id', \request()->user()->id]
         ])->first();
 
