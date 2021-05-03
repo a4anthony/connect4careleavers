@@ -249,7 +249,7 @@ export default {
     components: { LoadingIcon, ImageUpload, App },
     props: {
         user: Object,
-        countries: Array,
+        countries: Object,
     },
     mounted() {
         this.form = this.$inertia.form({

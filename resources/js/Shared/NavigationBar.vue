@@ -86,14 +86,17 @@
                                             >Your Profile</inertia-link
                                         >
                                     </MenuItem>
-                                    <MenuItem v-slot="{ active }">
-                                        <a
-                                            href="#"
+                                    <MenuItem
+                                        v-if="$page.props.auth.user.is_admin"
+                                        v-slot="{ active }"
+                                    >
+                                        <inertia-link
+                                            :href="route('admin')"
                                             :class="[
                                                 active ? 'bg-gray-100' : '',
                                                 'block px-4 py-2 text-sm text-gray-700',
                                             ]"
-                                            >Admin Panel</a
+                                            >Admin Panel</inertia-link
                                         >
                                     </MenuItem>
 

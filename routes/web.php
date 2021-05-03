@@ -99,4 +99,13 @@ Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search'])
 Route::get('/jobs', [\App\Http\Controllers\JobController::class, 'all'])
     ->middleware(['auth', 'verified'])->name('all.jobs');
 
+
+//ADMIN
+Route::get('/admin', [\App\Http\Controllers\AdminController::class, 'all'])
+    ->middleware(['auth', 'admin', 'verified'])->name('admin');
+Route::get('/admin/reported-users', [\App\Http\Controllers\AdminController::class, 'all'])
+    ->middleware(['auth', 'admin', 'verified'])->name('reportedUsers.admin');
+Route::get('/admin/jobs', [\App\Http\Controllers\AdminController::class, 'all'])
+    ->middleware(['auth', 'admin', 'verified'])->name('jobs.admin');
+
 require __DIR__ . '/auth.php';

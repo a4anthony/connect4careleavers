@@ -29,13 +29,13 @@ class PostFactory extends Factory
         ];
         $publicity = ['friends', 'public'];
         $dt = $this->faker->dateTimeBetween($startDate = '-1 years', $endDate = 'now');
-        $date = $dt->format("Y-m-d"); // 1994-09-24
+        //$date = $dt->format("Y-m-d"); // 1994-09-24
         return [
             'body' => $this->faker->text(150),
             'publicity' => $publicity[mt_rand(0, 1)],
             'image' => $images[mt_rand(0, 3)],
-            'created_at' => $date,
-            'updated_at' => $date,
+            'created_at' => $dt,
+            'updated_at' => $dt,
         ];
     }
 }

@@ -26,6 +26,8 @@ class HomeController extends Controller
         return Inertia::render('Welcome', [
             'feeds' => $feeds,
             'jobs' => $jobs,
+            'pageTitle' => 'Home - ' . config('app.name'),
+
         ]);
     }
 
