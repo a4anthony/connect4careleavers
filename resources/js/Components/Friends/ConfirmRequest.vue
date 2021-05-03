@@ -40,8 +40,8 @@ export default {
     },
     methods: {
         confirmFriend(friend) {
-            this.confirmFriendForm.friend_id = friend.id;
-            this.confirmFriendForm.post(this.route("confirm.friend"), {
+            this.form.friend_id = friend.id;
+            this.form.post(this.route("confirm.friend"), {
                 preserveScroll: true,
             });
         },

@@ -1,8 +1,21 @@
 <template>
     <div>
+        <teleport to="head">
+            <title>{{ pageTitle }}</title>
+        </teleport>
         <navigation-bar />
         <alerts />
-        <main class="mt-8 mb-20" style="min-height: 100vh">
+        <main
+            class=""
+            :class="{
+                'absolute top-24 bottom-0 left-0 right-0 mt-0 mb-4': onMessages,
+                'mb-20 mt-8 ': !onMessages,
+            }"
+            :style="!onMessages ? { minHeight: '100vh' } : {}"
+        >
+            <div class="px-3 mb-6 visible sm:hidden" v-if="!onMessages">
+                <search-form />
+            </div>
             <slot></slot>
         </main>
         <scroll-to-top />
@@ -15,14 +28,23 @@ import NavigationBar from "@/Shared/NavigationBar";
 import Alerts from "@/Shared/Alerts";
 import ScrollToTop from "@/Shared/ScrollToTop";
 import PageLoader from "@/Shared/PageLoader";
+import SearchForm from "@/Shared/SearchForm";
 export default {
     name: "App",
-    components: { PageLoader, ScrollToTop, Alerts, NavigationBar },
+    props: {
+        pageTitle: String,
+    },
+    components: { SearchForm, PageLoader, ScrollToTop, Alerts, NavigationBar },
     data() {
         return {
             animate: false,
             currentPage: "",
         };
+    },
+    computed: {
+        onMessages() {
+            return this.route().current() === "messages";
+        },
     },
     mounted() {},
     watch: {},

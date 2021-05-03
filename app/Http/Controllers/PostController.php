@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
@@ -21,6 +22,19 @@ class PostController extends Controller
         }
         $feeds = Post::whereIn('user_id', $postIds)->orWhere('publicity', 'public')->latest()->paginate(5);
         return response()->json($feeds);
+    }
+
+
+    public function show($username, $postId)
+    {
+        $user = User::where('username', $username)->first();
+        $feed = Post::where([
+            ['user_id', $user->id],
+            ['id', $postId]
+        ])->latest()->paginate(5);
+        return Inertia::render('Post', [
+            'feed' => $feed
+        ]);
     }
 
     public function store()

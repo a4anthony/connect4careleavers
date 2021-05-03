@@ -2,7 +2,6 @@
     <button
         @click="like(feed.id)"
         class="flex items-center"
-        v-else
         :disabled="form.processing"
     >
         <span

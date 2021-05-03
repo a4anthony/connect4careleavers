@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Job;
 use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
@@ -12,7 +13,6 @@ class HomeController extends Controller
 {
     public function all()
     {
-
         $user = \request()->user();
         $postIds = [];
         array_push($postIds, $user->id);
@@ -21,10 +21,13 @@ class HomeController extends Controller
             array_push($postIds, $id);
         }
         $feeds = Post::whereIn('user_id', $postIds)->orWhere('publicity', 'public')->latest()->paginate(10);
+        $jobs = Job::latest()->limit(5)->get();
 
-        //dd($feeds->toArray());
         return Inertia::render('Welcome', [
-            'feeds' => $feeds
+            'feeds' => $feeds,
+            'jobs' => $jobs,
+            'pageTitle' => 'Home - ' . config('app.name'),
+
         ]);
     }
 

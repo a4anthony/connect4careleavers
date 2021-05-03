@@ -22,18 +22,16 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        //$gender =
-        $name = $this->faker->name();
         $fname = $this->faker->firstName;
         $lname = $this->faker->lastName;
         $abrr = substr($fname, 0, 1) . substr($lname, 0, 1);
-        dump($abrr);
-        //dd($this->faker->imageUrl(100, 100, null, false, $abrr, false));
-        //substr("hello", 0, 1)
+
         return [
             'name' => $fname . ' ' . $lname,
             'username' => $this->faker->unique()->userName,
             'country' => $this->faker->country,
+            'is_admin' => mt_rand(0, 1),
+            'is_active' => mt_rand(0, 1),
             'avatar' => $this->faker->imageUrl(400, 400, null, false, $abrr, false),
             'bio' => $this->faker->text(200),
             'city' => $this->faker->city,

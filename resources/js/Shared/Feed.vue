@@ -96,9 +96,23 @@
                     <add-comment :post-id="feed.id" />
                 </div>
             </div>
+            <div v-else class="mt-3 text-center">
+                <inertia-link
+                    :href="
+                        route('show.post', {
+                            username: feed.author.username,
+                            postId: feed.id,
+                        })
+                    "
+                    type="button"
+                    class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+                >
+                    View Comments
+                </inertia-link>
+            </div>
         </div>
 
-        <div class="mt-6" v-if="feeds.data.length !== 0">
+        <div class="mt-6" v-if="feeds.total > 15">
             <pagination
                 :disable-prev="feeds.current_page === 1"
                 :disable-next="feeds.last_page === feeds.current_page"
@@ -114,7 +128,12 @@
 <script>
 import AddComment from "@/Shared/AddComment";
 import Comments from "@/Shared/Comments";
-import { ChatIcon, HeartIcon, TrashIcon } from "@heroicons/vue/solid";
+import {
+    ChatIcon,
+    HeartIcon,
+    TrashIcon,
+    ChevronRightIcon,
+} from "@heroicons/vue/solid";
 import Pagination from "@/Shared/Pagination";
 import LoadingIcon from "@/Shared/LoadingIcon";
 import LikePost from "@/Components/Post/LikePost";
@@ -126,6 +145,10 @@ export default {
         feeds: Object,
         user: Object,
         disableComments: {
+            type: Boolean,
+            default: true,
+        },
+        hidePagination: {
             type: Boolean,
             default: true,
         },
@@ -141,6 +164,7 @@ export default {
         ChatIcon,
         HeartIcon,
         TrashIcon,
+        ChevronRightIcon,
     },
 
     mounted() {},

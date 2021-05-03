@@ -22,6 +22,11 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'bio',
+        'website',
+        'country',
+        'city',
+        'avatar',
     ];
 
     protected $appends = ['current_friend', 'request_received', 'request_sent'];
@@ -97,6 +102,11 @@ class User extends Authenticatable
             ['user_id', $this->attributes['id']],
             ['friend_id', request()->user()->id]
         ])->exists();
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 
 }
