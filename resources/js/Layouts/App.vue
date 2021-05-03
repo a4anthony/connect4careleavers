@@ -3,8 +3,11 @@
         <navigation-bar />
         <alerts />
         <main
-            class="mt-8 mb-20"
-            :class="{ 'absolute top-24 bottom-0 left-0 right-0': onMessages }"
+            class=""
+            :class="{
+                'absolute top-24 bottom-0 left-0 right-0 mt-0 mb-4': onMessages,
+                'mb-20 mt-8 ': !onMessages,
+            }"
             :style="!onMessages ? { minHeight: '100vh' } : {}"
         >
             <slot></slot>

@@ -31,6 +31,7 @@ class ProfileController extends Controller
         $friends = User::whereIn('id', $friendsId)->latest()->get()->toArray();
         $friendRequests = User::whereIn('id', $friendRequestsId)->latest()->get()->toArray();
 
+        //dd($user->toArray());
         return Inertia::render('Profile/Index', [
             'user' => $user,
             'feeds' => Post::where('user_id', $user->id)->latest()->paginate(5),

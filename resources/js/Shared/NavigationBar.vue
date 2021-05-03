@@ -223,8 +223,11 @@ export default {
     data() {
         return {
             friendOverlay: true,
+            notificationsCount: 0,
+            notifications: [],
         };
     },
+    created() {},
 };
 </script>
 

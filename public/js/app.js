@@ -36676,6 +36676,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _heroicons_vue_outline_esm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @heroicons/vue/outline/esm */ "./node_modules/@heroicons/vue/outline/esm/index.js");
+/* harmony import */ var _Shared_LoadingIcon__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Shared/LoadingIcon */ "./resources/js/Shared/LoadingIcon.vue");
+
 
 
 var uniqueId = __webpack_require__(/*! lodash.uniqueid */ "./node_modules/lodash.uniqueid/index.js");
@@ -36683,6 +36685,7 @@ var uniqueId = __webpack_require__(/*! lodash.uniqueid */ "./node_modules/lodash
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ChatForm",
   components: {
+    LoadingIcon: _Shared_LoadingIcon__WEBPACK_IMPORTED_MODULE_1__.default,
     PaperAirplaneIcon: _heroicons_vue_outline_esm__WEBPACK_IMPORTED_MODULE_0__.PaperAirplaneIcon
   },
   props: {
@@ -36691,12 +36694,15 @@ var uniqueId = __webpack_require__(/*! lodash.uniqueid */ "./node_modules/lodash
       "default": function _default() {
         return "chat-message-".concat(uniqueId());
       }
-    }
+    },
+    friendId: Number
   },
+  watch: {},
   data: function data() {
     return {
       form: this.$inertia.form({
-        message: ""
+        message: "",
+        friend_id: ""
       })
     };
   },
@@ -36709,8 +36715,16 @@ var uniqueId = __webpack_require__(/*! lodash.uniqueid */ "./node_modules/lodash
       }
     },
     sendMessage: function sendMessage() {
+      var _this = this;
+
+      this.form.friend_id = this.friendId;
       this.form.post(this.route("send.messages"), {
-        preserveScroll: true
+        preserveScroll: true,
+        onSuccess: function onSuccess() {
+          _this.form.reset("message");
+
+          _this.$emit("scroll");
+        }
       });
     }
   }
@@ -36751,7 +36765,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "ChatMessages",
-  props: ["messages"]
+  props: {
+    messages: Array,
+    user: Object,
+    typingInfo: Object
+  }
 });
 
 /***/ }),
@@ -38047,9 +38065,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/App */ "./resources/js/Layouts/App.vue");
 /* harmony import */ var _Components_Chat_ChatMessages__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Components/Chat/ChatMessages */ "./resources/js/Components/Chat/ChatMessages.vue");
 /* harmony import */ var _Components_Chat_ChatForm__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Components/Chat/ChatForm */ "./resources/js/Components/Chat/ChatForm.vue");
-/* harmony import */ var _Components_Chat_Friends__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/Chat/Friends */ "./resources/js/Components/Chat/Friends.vue");
-/* harmony import */ var _Components_Chat_ChatHeader__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @/Components/Chat/ChatHeader */ "./resources/js/Components/Chat/ChatHeader.vue");
-
+/* harmony import */ var _Components_Chat_ChatHeader__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/Components/Chat/ChatHeader */ "./resources/js/Components/Chat/ChatHeader.vue");
 
 
 
@@ -38057,32 +38073,30 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Index",
   components: {
-    ChatHeader: _Components_Chat_ChatHeader__WEBPACK_IMPORTED_MODULE_4__.default,
-    Friends: _Components_Chat_Friends__WEBPACK_IMPORTED_MODULE_3__.default,
+    ChatHeader: _Components_Chat_ChatHeader__WEBPACK_IMPORTED_MODULE_3__.default,
     ChatForm: _Components_Chat_ChatForm__WEBPACK_IMPORTED_MODULE_2__.default,
     ChatMessages: _Components_Chat_ChatMessages__WEBPACK_IMPORTED_MODULE_1__.default,
     App: _Layouts_App__WEBPACK_IMPORTED_MODULE_0__.default
   },
   props: {
     messages: Array,
-    friend: Array,
-    user: Array
+    friend: Object,
+    user: Object
   },
   data: function data() {
     return {
-      su: "gg",
-      sm: "gg",
-      chatMesssagesHeight: 0
+      messagesArr: [],
+      chatMessagesHeight: 0,
+      typingInfo: null
     };
   },
   created: function created() {
     Pusher.logToConsole = true;
-    console.log(Pusher.logToConsole);
     var pusher = new Pusher("5c833ecd27bc5d86a4c9", {
       cluster: "eu",
-      authEndpoint: "https://connect4careleavers.test/broadcasting/auth"
-    }); //
+      authEndpoint: "/broadcasting/auth" // authEndpoint: "https://connect4careleavers.test/broadcasting/auth",
 
+    });
     var channel = pusher.subscribe("private-chat");
     channel.bind("pusher:subscription_succeeded", function (data) {
       console.log("data");
@@ -38092,19 +38106,71 @@ __webpack_require__.r(__webpack_exports__);
       console.log("data");
       console.log(data);
     });
+    channel.bind("client-typing", function (data) {
+      console.log("data");
+      that.typingInfo = data;
+      setTimeout(function () {
+        that.scrollToElement();
+      }, 100);
+      setTimeout(function () {
+        that.typingInfo = null;
+        that.scrollToElement();
+        console.log("done typing");
+      }, 2000);
+      console.log(data);
+    });
     var that = this;
     channel.bind("newChat", function (data) {
       console.log("data");
-      console.log(data);
+
+      if (data.message.user_id === that.user.id && data.message.friend_id === that.friend.id || data.message.user_id === that.friend.id && data.message.friend_id === that.user.id) {
+        that.messagesArr.push(data.message);
+        setTimeout(function () {
+          that.scrollToElement();
+        }, 100);
+        console.log("data below");
+      }
+
+      console.log(that.messagesArr);
     });
   },
   mounted: function mounted() {
-    console.log(this.$refs.chatForm.clientHeight);
+    this.messagesArr = this.messages;
     this.setHeight();
+    var that = this;
+    setTimeout(function () {
+      that.scrollToElement();
+    }, 100);
   },
   methods: {
+    isTyping: function isTyping() {
+      var channel = Echo["private"]("chat");
+      var that = this;
+
+      if (this.typingInfo) {
+        return;
+      }
+
+      setTimeout(function () {
+        channel.whisper("typing", {
+          user_id: that.user.id,
+          username: that.user.username,
+          typing: true
+        });
+      }, 300);
+    },
     setHeight: function setHeight() {
-      this.chatMesssagesHeight = this.$refs.chatForm.clientHeight + 15 + "px";
+      this.chatMessagesHeight = this.$refs.chatForm.clientHeight + 15 + "px";
+    },
+    scrollToElement: function scrollToElement() {
+      var el = this.$refs.chatMessages;
+
+      if (el) {
+        el.scrollTo({
+          top: el.scrollHeight,
+          behavior: "smooth"
+        });
+      }
     }
   }
 });
@@ -38958,9 +39024,12 @@ var userNavigation = [{
   },
   data: function data() {
     return {
-      friendOverlay: true
+      friendOverlay: true,
+      notificationsCount: 0,
+      notifications: []
     };
-  }
+  },
+  created: function created() {}
 });
 
 /***/ }),
@@ -39205,6 +39274,8 @@ var _hoisted_3 = {
 var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data, $options) {
   var _component_PaperAirplaneIcon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("PaperAirplaneIcon");
 
+  var _component_loading_icon = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("loading-icon");
+
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("label", {
     "for": $props.id,
     "class": "hidden"
@@ -39224,25 +39295,28 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
     onInput: _cache[2] || (_cache[2] = function () {
       return $options.setHeight && $options.setHeight.apply($options, arguments);
     }),
+    onKeydown: _cache[3] || (_cache[3] = function ($event) {
+      return _ctx.$emit('typing');
+    }),
     ref: "textArea",
-    onKeyup: _cache[3] || (_cache[3] = (0,vue__WEBPACK_IMPORTED_MODULE_0__.withKeys)(function () {
-      return $options.sendMessage && $options.sendMessage.apply($options, arguments);
-    }, ["enter"])),
     style: {
       "resize": "none"
     }
   }, null, 40
   /* PROPS, HYDRATE_EVENTS */
   , ["id"]), [[vue__WEBPACK_IMPORTED_MODULE_0__.vModelText, $data.form.message]])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("button", {
-    "class": [{
-      'opacity-25': $data.form.processing
-    }, "w-full h-full font-bold inline-flex items-center justify-center border border-gray-300 shadow-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"],
     disabled: $data.form.processing || $data.form.message.length === 0,
-    type: "submit"
-  }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_PaperAirplaneIcon, {
+    onClick: _cache[4] || (_cache[4] = function () {
+      return $options.sendMessage && $options.sendMessage.apply($options, arguments);
+    }),
+    "class": "w-full h-full font-bold inline-flex items-center justify-center border border-gray-300 shadow-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
+  }, [!$data.form.processing ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_PaperAirplaneIcon, {
+    key: 0,
     "class": "w-5 h-5"
-  })], 10
-  /* CLASS, PROPS */
+  })) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_loading_icon, {
+    key: 1
+  }))], 8
+  /* PROPS */
   , ["disabled"])])]);
 });
 
@@ -39342,33 +39416,43 @@ var _withId = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.withScopeId)("dat
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.pushScopeId)("data-v-d3b90400");
 
 var _hoisted_1 = {
-  "class": "chat"
+  "class": "font-bold"
 };
 var _hoisted_2 = {
-  "class": "left clearfix"
+  "class": "block mt-2 text-gray-400 font-extralight",
+  style: {
+    "font-size": "0.6rem"
+  }
 };
 var _hoisted_3 = {
-  "class": "chat-body clearfix"
+  key: 0,
+  "class": "text-center mb-2 text-xs mt-1"
 };
-
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-  "class": "header"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("strong", {
-  "class": "primary-font"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("{{ message.user.name }}"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" jfnffjdn ")])], -1
-/* HOISTED */
-);
 
 (0,vue__WEBPACK_IMPORTED_MODULE_0__.popScopeId)();
 
 var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data, $options) {
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("ul", _hoisted_1, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.messages, function (message) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("li", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_3, [_hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("p", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(message.message), 1
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.messages, function (msg) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("li", {
+      key: "msg".concat(msg.id)
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      "class": [$props.user.id === msg.user_id ? 'ml-12 sm:ml-4 justify-end' : 'mr-12 sm:mr-4 justify-start', "flex"]
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
+      "class": [$props.user.id === msg.user_id ? 'bg-indigo-600' : 'bg-gray-600', "text-xs rounded-xl p-3 text-gray-100 mb-2"]
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.message), 1
     /* TEXT */
-    )])]);
-  }), 256
-  /* UNKEYED_FRAGMENT */
-  ))]);
+    ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("span", _hoisted_2, " sent on " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg.created_at), 1
+    /* TEXT */
+    )], 2
+    /* CLASS */
+    )], 2
+    /* CLASS */
+    )]);
+  }), 128
+  /* KEYED_FRAGMENT */
+  )), $props.typingInfo && $props.typingInfo.typing && $props.typingInfo.user_id !== $props.user.id ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("li", _hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.typingInfo.username) + " is typing... ", 1
+  /* TEXT */
+  )) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true)]);
 });
 
 /***/ }),
@@ -40713,8 +40797,9 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
   var _component_page_loader = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("page-loader");
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_navigation_bar), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_alerts), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("main", {
-    "class": ["mt-8 mb-20", {
-      'absolute top-24 bottom-0 left-0 right-0': $options.onMessages
+    "class": ["", {
+      'absolute top-24 bottom-0 left-0 right-0 mt-0 mb-4': $options.onMessages,
+      'mb-20 mt-8 ': !$options.onMessages
     }],
     style: !$options.onMessages ? {
       minHeight: '100vh'
@@ -41752,9 +41837,9 @@ var _hoisted_5 = {
 var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data, $options) {
   var _component_chat_header = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("chat-header");
 
-  var _component_chat_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("chat-form");
+  var _component_chat_messages = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("chat-messages");
 
-  var _component_friends = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("friends");
+  var _component_chat_form = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("chat-form");
 
   var _component_app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("app");
 
@@ -41765,27 +41850,33 @@ var render = /*#__PURE__*/_withId(function (_ctx, _cache, $props, $setup, $data,
       }, null, 8
       /* PROPS */
       , ["friend"])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", {
-        "class": "bg-green-200 absolute left-4 right-4 bottom-0 top-20",
+        id: "chatMessages",
+        ref: "chatMessages",
+        "class": "bg-gray-100 absolute left-4 right-4 bottom-0 top-20 px-2",
         style: [{
           "overflow-y": "scroll"
         }, {
-          bottom: $data.chatMesssagesHeight
+          bottom: $data.chatMessagesHeight
         }]
-      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("ul", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(40, function (msg) {
-        return (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("li", null, "messages " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(msg), 1
-        /* TEXT */
-        );
-      }), 64
-      /* STABLE_FRAGMENT */
-      ))])], 4
-      /* STYLE */
-      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_chat_form, {
-        onResize: $options.setHeight
+      }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_chat_messages, {
+        "typing-info": $data.typingInfo,
+        onScroll: $options.scrollToElement,
+        messages: $data.messagesArr,
+        user: $props.user
       }, null, 8
       /* PROPS */
-      , ["onResize"])], 512
+      , ["typing-info", "onScroll", "messages", "user"])])], 4
+      /* STYLE */
+      ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)("div", _hoisted_5, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_chat_form, {
+        onTyping: $options.isTyping,
+        onScroll: $options.scrollToElement,
+        onResize: $options.setHeight,
+        "friend-id": $props.friend.id
+      }, null, 8
+      /* PROPS */
+      , ["onTyping", "onScroll", "onResize", "friend-id"])], 512
       /* NEED_PATCH */
-      )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_friends)]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("<div class=\"container\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <div class=\"row\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <div class=\"col-md-8 col-md-offset-2\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            <div class=\"panel panel-default\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                <div class=\"panel-heading\">Chats</div>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                <div class=\"panel-body\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <chat-messages :messages=\"messages\"></chat-messages>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                <div class=\"panel-footer\">"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                    <chat-form></chat-form>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("                </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("            </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    </div>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <h1>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <pre>{{ su }}</pre>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    </h1>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    <h1>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("        <pre>{{ sm }}</pre>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("    </h1>"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("</div>")];
+      )])])])];
     }),
     _: 1
     /* STABLE */

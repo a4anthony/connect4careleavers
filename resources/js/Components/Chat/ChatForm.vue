@@ -12,19 +12,19 @@
                 maxlength="250"
                 required
                 @input="setHeight"
+                @keydown="$emit('typing')"
                 ref="textArea"
-                @keyup.enter="sendMessage"
                 style="resize: none"
             ></textarea>
         </div>
         <div class="w-10 h-10 items-center flex flex-none">
             <button
-                :class="{ 'opacity-25': form.processing }"
                 :disabled="form.processing || form.message.length === 0"
-                type="submit"
+                @click="sendMessage"
                 class="w-full h-full font-bold inline-flex items-center justify-center border border-gray-300 shadow-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500"
             >
-                <PaperAirplaneIcon class="w-5 h-5" />
+                <PaperAirplaneIcon v-if="!form.processing" class="w-5 h-5" />
+                <loading-icon v-else />
             </button>
         </div>
     </div>
@@ -32,12 +32,14 @@
 
 <script>
 import { PaperAirplaneIcon } from "@heroicons/vue/outline/esm";
+import LoadingIcon from "@/Shared/LoadingIcon";
 
 const uniqueId = require("lodash.uniqueid");
 
 export default {
     name: "ChatForm",
     components: {
+        LoadingIcon,
         PaperAirplaneIcon,
     },
     props: {
@@ -47,11 +49,14 @@ export default {
                 return `chat-message-${uniqueId()}`;
             },
         },
+        friendId: Number,
     },
+    watch: {},
     data() {
         return {
             form: this.$inertia.form({
                 message: "",
+                friend_id: "",
             }),
         };
     },
@@ -66,8 +71,13 @@ export default {
             }
         },
         sendMessage() {
+            this.form.friend_id = this.friendId;
             this.form.post(this.route("send.messages"), {
                 preserveScroll: true,
+                onSuccess: () => {
+                    this.form.reset("message");
+                    this.$emit("scroll");
+                },
             });
         },
     },

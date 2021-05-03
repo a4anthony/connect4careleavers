@@ -1,17 +1,43 @@
 <template>
-    <ul class="chat">
-        <li class="left clearfix" v-for="message in messages">
-            <div class="chat-body clearfix">
-                <div class="header">
-                    <strong class="primary-font">
-                        <!--{{ message.user.name }}-->
-                        jfnffjdn
-                    </strong>
+    <ul>
+        <li v-for="msg in messages" :key="`msg${msg.id}`">
+            <div
+                :class="
+                    user.id === msg.user_id
+                        ? 'ml-12 sm:ml-4 justify-end'
+                        : 'mr-12 sm:mr-4 justify-start'
+                "
+                class="flex"
+            >
+                <div
+                    :class="
+                        user.id === msg.user_id
+                            ? 'bg-indigo-600'
+                            : 'bg-gray-600'
+                    "
+                    class="text-xs rounded-xl p-3 text-gray-100 mb-2"
+                >
+                    <div class="font-bold">
+                        {{ msg.message }}
+                    </div>
+                    <span
+                        class="block mt-2 text-gray-400 font-extralight"
+                        style="font-size: 0.6rem"
+                    >
+                        sent on {{ msg.created_at }}
+                    </span>
                 </div>
-                <p>
-                    {{ message.message }}
-                </p>
             </div>
+        </li>
+        <li
+            class="text-center mb-2 text-xs mt-1"
+            v-if="
+                typingInfo &&
+                typingInfo.typing &&
+                typingInfo.user_id !== user.id
+            "
+        >
+            {{ typingInfo.username }} is typing...
         </li>
     </ul>
 </template>
@@ -19,7 +45,11 @@
 <script>
 export default {
     name: "ChatMessages",
-    props: ["messages"],
+    props: {
+        messages: Array,
+        user: Object,
+        typingInfo: Object,
+    },
 };
 </script>
 

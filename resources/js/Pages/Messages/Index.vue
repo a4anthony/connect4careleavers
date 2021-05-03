@@ -10,46 +10,35 @@
                         <chat-header :friend="friend" />
                     </div>
                     <div
-                        class="bg-green-200 absolute left-4 right-4 bottom-0 top-20"
+                        id="chatMessages"
+                        ref="chatMessages"
+                        class="bg-gray-100 absolute left-4 right-4 bottom-0 top-20 px-2"
                         style="overflow-y: scroll"
-                        :style="{ bottom: chatMesssagesHeight }"
+                        :style="{ bottom: chatMessagesHeight }"
                     >
-                        <ul>
-                            <li v-for="msg in 40">messages {{ msg }}</li>
-                        </ul>
+                        <div>
+                            <chat-messages
+                                :typing-info="typingInfo"
+                                @scroll="scrollToElement"
+                                :messages="messagesArr"
+                                :user="user"
+                            />
+                        </div>
                     </div>
                     <div
                         ref="chatForm"
                         class="absolute bg-indigo-400 bottom-0 right-0 left-0 px-4 py-2 rounded-b-lg"
                     >
-                        <chat-form @resize="setHeight" />
+                        <chat-form
+                            @typing="isTyping"
+                            @scroll="scrollToElement"
+                            @resize="setHeight"
+                            :friend-id="friend.id"
+                        />
                     </div>
                 </div>
             </div>
-            <friends />
         </div>
-        <!--<div class="container">-->
-        <!--    <div class="row">-->
-        <!--        <div class="col-md-8 col-md-offset-2">-->
-        <!--            <div class="panel panel-default">-->
-        <!--                <div class="panel-heading">Chats</div>-->
-
-        <!--                <div class="panel-body">-->
-        <!--                    <chat-messages :messages="messages"></chat-messages>-->
-        <!--                </div>-->
-        <!--                <div class="panel-footer">-->
-        <!--                    <chat-form></chat-form>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--    </div>-->
-        <!--    <h1>-->
-        <!--        <pre>{{ su }}</pre>-->
-        <!--    </h1>-->
-        <!--    <h1>-->
-        <!--        <pre>{{ sm }}</pre>-->
-        <!--    </h1>-->
-        <!--</div>-->
     </app>
 </template>
 
@@ -57,33 +46,31 @@
 import App from "@/Layouts/App";
 import ChatMessages from "@/Components/Chat/ChatMessages";
 import ChatForm from "@/Components/Chat/ChatForm";
-import Friends from "@/Components/Chat/Friends";
 import ChatHeader from "@/Components/Chat/ChatHeader";
 
 export default {
     name: "Index",
-    components: { ChatHeader, Friends, ChatForm, ChatMessages, App },
+    components: { ChatHeader, ChatForm, ChatMessages, App },
     props: {
         messages: Array,
-        friend: Array,
-        user: Array,
+        friend: Object,
+        user: Object,
     },
     data() {
         return {
-            su: "gg",
-            sm: "gg",
-            chatMesssagesHeight: 0,
+            messagesArr: [],
+            chatMessagesHeight: 0,
+            typingInfo: null,
         };
     },
     created() {
         Pusher.logToConsole = true;
-        console.log(Pusher.logToConsole);
 
         var pusher = new Pusher("5c833ecd27bc5d86a4c9", {
             cluster: "eu",
-            authEndpoint: "https://connect4careleavers.test/broadcasting/auth",
+            authEndpoint: "/broadcasting/auth",
+            // authEndpoint: "https://connect4careleavers.test/broadcasting/auth",
         });
-        //
         var channel = pusher.subscribe("private-chat");
         channel.bind("pusher:subscription_succeeded", function (data) {
             console.log("data");
@@ -93,20 +80,75 @@ export default {
             console.log("data");
             console.log(data);
         });
+
+        channel.bind("client-typing", function (data) {
+            console.log("data");
+            that.typingInfo = data;
+            setTimeout(function () {
+                that.scrollToElement();
+            }, 100);
+            setTimeout(function () {
+                that.typingInfo = null;
+                that.scrollToElement();
+                console.log("done typing");
+            }, 2000);
+            console.log(data);
+        });
         const that = this;
         channel.bind("newChat", function (data) {
             console.log("data");
-            console.log(data);
+
+            if (
+                (data.message.user_id === that.user.id &&
+                    data.message.friend_id === that.friend.id) ||
+                (data.message.user_id === that.friend.id &&
+                    data.message.friend_id === that.user.id)
+            ) {
+                that.messagesArr.push(data.message);
+                setTimeout(function () {
+                    that.scrollToElement();
+                }, 100);
+                console.log("data below");
+            }
+            console.log(that.messagesArr);
         });
     },
     mounted() {
-        console.log(this.$refs.chatForm.clientHeight);
+        this.messagesArr = this.messages;
         this.setHeight();
+        const that = this;
+
+        setTimeout(function () {
+            that.scrollToElement();
+        }, 100);
     },
     methods: {
+        isTyping() {
+            let channel = Echo.private("chat");
+            const that = this;
+            if (this.typingInfo) {
+                return;
+            }
+            setTimeout(function () {
+                channel.whisper("typing", {
+                    user_id: that.user.id,
+                    username: that.user.username,
+                    typing: true,
+                });
+            }, 300);
+        },
         setHeight() {
-            this.chatMesssagesHeight =
+            this.chatMessagesHeight =
                 this.$refs.chatForm.clientHeight + 15 + "px";
+        },
+        scrollToElement() {
+            const el = this.$refs.chatMessages;
+            if (el) {
+                el.scrollTo({
+                    top: el.scrollHeight,
+                    behavior: "smooth",
+                });
+            }
         },
     },
 };
