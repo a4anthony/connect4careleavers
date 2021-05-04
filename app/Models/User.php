@@ -27,6 +27,8 @@ class User extends Authenticatable
         'country',
         'city',
         'avatar',
+        'is_admin',
+        'is_active',
     ];
 
     protected $appends = ['current_friend', 'request_received', 'request_sent'];
@@ -51,22 +53,48 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * User friends
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function friends()
     {
         return $this->hasMany(Friend::class, 'user_id', 'id');
     }
 
-    public function friendRequestsReceived()
-    {
-        return $this->hasMany(Friend::class, 'friend_id', 'id');
-    }
-
+    /**
+     * Set created at
+     *
+     * @param $value
+     *
+     * @return string
+     */
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->format('M j, Y');
     }
 
+    public function getAvatarAttribute($value)
+    {
+        if($value){
+            return $value;
+        }
+        $name = $this['name'];
+        $fname = explode(' ', $name)[0];
+        $lname = explode(' ', $name)[1];
+        $abrr = substr($fname, 0, 1) . substr($lname, 0, 1);
 
+        return 'https://via.placeholder.com/400x400.png/0088dd?text=' .$abrr;
+    }
+
+    /**
+     * Check current friend status
+     *
+     *
+     * @return bool
+     */
     public function getCurrentFriendAttribute()
     {
         $check1 = Friend::where([
@@ -85,6 +113,12 @@ class User extends Authenticatable
         return false;
     }
 
+    /**
+     * Check request sent status
+     *
+     *
+     * @return mixed
+     */
     public function getRequestSentAttribute()
     {
         return Friend::where([
@@ -95,6 +129,12 @@ class User extends Authenticatable
         ])->exists();
     }
 
+    /**
+     * Check request received status
+     *
+     *
+     * @return mixed
+     */
     public function getRequestReceivedAttribute()
     {
         return Friend::where([
@@ -104,6 +144,12 @@ class User extends Authenticatable
         ])->exists();
     }
 
+    /**
+     * User messages
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function messages()
     {
         return $this->hasMany(Message::class);

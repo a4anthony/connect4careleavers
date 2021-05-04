@@ -1,5 +1,5 @@
 <template>
-    <app>
+    <app :page-title="$page.props.pageTitle">
         <div class="container mx-auto">
             <div class="px-3">
                 <form
@@ -222,6 +222,18 @@
                     <div class="pt-5">
                         <div class="flex justify-end">
                             <button
+                                type="button"
+                                @click="showModal = true"
+                                class="mr-2 font-bold inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-red-500"
+                            >
+                                <span v-if="!form.processing && !showModal">
+                                    Deactivate Account
+                                </span>
+                                <loading-icon
+                                    v-if="showModal || form.processing"
+                                />
+                            </button>
+                            <button
                                 type="submit"
                                 :disabled="form.processing"
                                 class="font-bold ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -237,6 +249,12 @@
             </div>
         </div>
         <image-upload ref="imageUpload" @get-image="getImage" />
+        <confirm-modal
+            :open="showModal"
+            @confirmed="deactivate"
+            text="Are you sure you want to deactivate your account?."
+            @close="showModal = false"
+        />
     </app>
 </template>
 
@@ -244,9 +262,10 @@
 import App from "@/Layouts/App";
 import ImageUpload from "@/Shared/ImageUpload";
 import LoadingIcon from "@/Shared/LoadingIcon";
+import ConfirmModal from "@/Shared/ConfirmModal";
 export default {
     name: "Edit",
-    components: { LoadingIcon, ImageUpload, App },
+    components: { ConfirmModal, LoadingIcon, ImageUpload, App },
     props: {
         user: Object,
         countries: Object,
@@ -265,6 +284,7 @@ export default {
     },
     data() {
         return {
+            showModal: false,
             form: this.$inertia.form({
                 name: "",
                 username: "",
@@ -282,6 +302,14 @@ export default {
         getImage(img, file) {
             this.form.avatar = file;
             this.imgSrc = img;
+        },
+        deactivate() {
+            this.showModal = false;
+            this.form.post(this.route("deactivate.profile"), {
+                onFinish: () => {
+                    this.form.reset("processing");
+                },
+            });
         },
         submit() {
             if (!this.form.name) {

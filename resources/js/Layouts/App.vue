@@ -65,9 +65,27 @@ export default {
         finish(e) {
             const that = this;
             if (e.detail.visit.method === "get") {
+                this.bodyScroll(false);
                 setTimeout(function () {
                     that.animate = false;
                 }, 100);
+            }
+        },
+        bodyScroll(bool) {
+            const $body = document.querySelector("body");
+            let scrollPosition = 0;
+            if (bool) {
+                scrollPosition = window.pageYOffset;
+                $body.style.overflow = "hidden";
+                $body.style.position = "fixed";
+                $body.style.top = `-${scrollPosition}px`;
+                $body.style.width = "100%";
+            } else {
+                $body.style.removeProperty("overflow");
+                $body.style.removeProperty("position");
+                $body.style.removeProperty("top");
+                $body.style.removeProperty("width");
+                window.scrollTo(0, scrollPosition);
             }
         },
     },

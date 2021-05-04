@@ -23,7 +23,7 @@ Route::get('/liked-posts', [\App\Http\Controllers\HomeController::class, 'likedP
 
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return redirect()->route('home');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //POST
@@ -68,6 +68,8 @@ Route::get('/profile/{username}/edit', [\App\Http\Controllers\ProfileController:
     ->middleware(['auth', 'verified'])->name('edit.profile');
 Route::post('/profile/{username}/edit', [\App\Http\Controllers\ProfileController::class, 'update'])
     ->middleware(['auth', 'verified'])->name('update.profile');
+Route::post('/profile/deactivate', [\App\Http\Controllers\ProfileController::class, 'deactivate'])
+    ->middleware(['auth', 'verified'])->name('deactivate.profile');
 Route::get('/profile/{username}/friends/requests', [\App\Http\Controllers\ProfileController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('show.profile.friends.request');
 Route::get('/profile/{username}/about', [\App\Http\Controllers\ProfileController::class, 'show'])
@@ -98,6 +100,12 @@ Route::get('/search', [\App\Http\Controllers\SearchController::class, 'search'])
 //JOBS
 Route::get('/jobs', [\App\Http\Controllers\JobController::class, 'all'])
     ->middleware(['auth', 'verified'])->name('all.jobs');
+Route::post('/jobs', [\App\Http\Controllers\JobController::class, 'store'])
+    ->middleware(['auth', 'admin','verified'])->name('store.jobs');
+Route::post('/jobs/edit', [\App\Http\Controllers\JobController::class, 'update'])
+    ->middleware(['auth', 'admin','verified'])->name('update.jobs');
+Route::delete('/jobs', [\App\Http\Controllers\JobController::class, 'destroy'])
+    ->middleware(['auth', 'admin','verified'])->name('destroy.jobs');
 
 
 //ADMIN
@@ -107,5 +115,9 @@ Route::get('/admin/reported-users', [\App\Http\Controllers\AdminController::clas
     ->middleware(['auth', 'admin', 'verified'])->name('reportedUsers.admin');
 Route::get('/admin/jobs', [\App\Http\Controllers\AdminController::class, 'all'])
     ->middleware(['auth', 'admin', 'verified'])->name('jobs.admin');
+Route::post('/admin/make', [\App\Http\Controllers\AdminController::class, 'makeAdmin'])
+    ->middleware(['auth', 'admin', 'verified'])->name('makeAdmin.admin');
+Route::post('/admin/remove', [\App\Http\Controllers\AdminController::class, 'removeAdmin'])
+    ->middleware(['auth', 'admin', 'verified'])->name('removeAdmin.admin');
 
 require __DIR__ . '/auth.php';

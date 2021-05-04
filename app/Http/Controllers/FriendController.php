@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class FriendController extends Controller
 {
+    /**
+     * Confirm request
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function confirm()
     {
         $req = Friend::where([
@@ -22,6 +28,12 @@ class FriendController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Add friend
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function addFriend()
     {
         $check = Friend::where([
@@ -41,6 +53,12 @@ class FriendController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Remove friend
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function unfriend()
     {
         $friend = Friend::where([

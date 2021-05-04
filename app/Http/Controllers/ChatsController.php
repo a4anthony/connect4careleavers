@@ -12,9 +12,15 @@ use Inertia\Inertia;
 
 class ChatsController extends Controller
 {
+    /**
+     * Get messages between users
+     *
+     * @param $friendUsername
+     *
+     * @return \Inertia\Response
+     */
     public function index($friendUsername)
     {
-        //dd($friendUsername);
         $user = User::where('username', $friendUsername)->first();
         $authUser = request()->user();
 
@@ -22,27 +28,35 @@ class ChatsController extends Controller
         $userMsgsIds = $user->messages->where('friend_id', $authUser->id)->pluck('id');
         $authUserMsgsIds = $authUser->messages->where('friend_id', $user->id)->pluck('id');
         $msgIds = $userMsgsIds->merge($authUserMsgsIds);
-        //dd($msgIds);
 
         $msgs = Message::whereIn('id', $msgIds)->orderBy('created_at', 'ASC')->get()->toArray();
-//dd($msgs);
-        //dump($user->messages->where('friend_id', $authUser->id));
-        //dump($authUser->messages->where('friend_id', $user->id));
-        //$msgs = $userMsgs->merge($authUserMsgs);
-        //dd($msgs->latest());
+
         return Inertia::render('Messages/Index', [
             'messages' => $msgs,
             'friend' => $user,
-            'user' => \request()->user()
+            'user' => \request()->user(),
+            'pageTitle' =>   'Messages - ' . config('app.name'),
         ]);
     }
 
+    /**
+     * Fetch user messages
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function fetch()
     {
         return Message::with('user')->get();
     }
 
-
+    /**
+     * Send message
+     *
+     * @param \Illuminate\Http\Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function send(Request $request)
     {
         $user = \request()->user();
@@ -53,16 +67,8 @@ class ChatsController extends Controller
             'friend_id' => \request('friend_id')
         ]);
 
-
-        //event(new MessageSent($user, $message));
-
-
-        //broadcast(new MessageSent($user, $message))->toOthers();
         broadcast(new MessageSent($message));
-
-        broadcast(new Notify('New message from ' . $user->username));
-
-
+        
         return redirect()->back();
     }
 }
