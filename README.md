@@ -5,6 +5,7 @@ Major technologies used:
 
 1. [Laravel](https://laravel.com/docs) as a backend php framework.
 1. [Laravel Breeze](https://laravel.com/docs/8.x/starter-kits#laravel-breeze) for user authentication.
+1. [Laravel Inertia](https://inertiajs.com/) to connect the backend framework to the frontend framework.
 2. [Vuejs](https://vuejs.org/) as a frontend javascript framework.
 3. [TailwindCss](https://tailwindcss.com/docs) as a css framework.
 4. [NodeJs](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) to handle javascript libraries.

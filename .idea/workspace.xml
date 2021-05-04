@@ -5,48 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="249bf177-ae0d-4daf-83b9-1e83f432491e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/js/Components/Admin/AdminJobs.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/Components/Admin/AdminUsers.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/Components/Admin/DeleteJob.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/Components/Admin/JobModal.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/Components/Admin/MakeAdmin.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/Components/Admin/RemoveAdmin.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/AdminController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/AdminController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthenticatedSessionController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Auth/AuthenticatedSessionController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ChatsController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ChatsController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CommentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CommentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/FriendController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/FriendController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/JobController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/JobController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PostController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ProfileController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ProfileController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SearchController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SearchController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Middleware/HandleInertiaRequests.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Middleware/HandleInertiaRequests.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Comment.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Comment.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Friend.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Friend.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Job.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Job.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Message.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Message.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Post.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Post.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/UserSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/UserSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Components/Admin/AdminNav.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Components/Admin/AdminNav.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Components/Admin/Stats.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Components/Admin/Stats.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Components/Friends/Unfriend.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Components/Friends/Unfriend.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Components/Job/JobList.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Components/Job/JobList.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Components/Profile/ProfileActions.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Components/Profile/ProfileActions.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Layouts/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Layouts/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Layouts/Guest.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Layouts/Guest.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Pages/Admin/Dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Pages/Admin/Dashboard.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Pages/Jobs/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Pages/Jobs/Index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Pages/Messages/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Pages/Messages/Index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Pages/Post.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Pages/Post.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Pages/Profile/Edit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Pages/Profile/Edit.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Pages/Profile/Index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Pages/Profile/Index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Pages/Welcome.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Pages/Welcome.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/Shared/NavigationBar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/Shared/NavigationBar.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
