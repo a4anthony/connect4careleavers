@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    /**
+     * Add new comment
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store()
     {
         Comment::create([
@@ -21,6 +27,12 @@ class CommentController extends Controller
         return redirect()->back()->with('success', 'Comment added.');
     }
 
+    /**
+     * Like comment
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function like()
     {
         if (!LikeComment::where([
@@ -36,6 +48,12 @@ class CommentController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Unlike comment
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function unlike()
     {
         LikeComment::where([
@@ -45,6 +63,12 @@ class CommentController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Delete comment
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy()
     {
         $comment = Comment::where([['user_id', \request()->user()->id], ['id', \request('comment_id')]])->first();

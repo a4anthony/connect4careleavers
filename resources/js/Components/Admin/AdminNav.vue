@@ -1,55 +1,36 @@
 <template>
     <div>
-        <div class="sm:hidden">
-            <label for="tabs" class="sr-only">Select a tab</label>
-            <select
-                id="tabs"
-                name="tabs"
-                class="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md"
-            >
-                <option
-                    v-for="tab in tabs"
-                    :key="tab.name"
-                    :selected="tab.current"
-                >
-                    {{ tab.name }}
-                </option>
-            </select>
-        </div>
-        <div class="hidden sm:block">
+        <div>
             <nav class="flex space-x-4" aria-label="Tabs">
-                <a
+                <inertia-link
                     v-for="tab in tabs"
                     :key="tab.name"
-                    :href="tab.href"
+                    :href="route(tab.href)"
                     :class="[
-                        tab.current
+                        route().current(tab.href)
                             ? 'bg-gray-100 text-gray-700'
                             : 'text-gray-500 hover:text-gray-700',
                         'font-bold px-3 py-2 font-medium text-sm rounded-md',
                     ]"
-                    :aria-current="tab.current ? 'page' : undefined"
+                    :aria-current="
+                        route().current(tab.href) ? 'page' : undefined
+                    "
                 >
                     {{ tab.name }}
-                </a>
+                    <span class="ml-1 font-semibold" v-if="tab.count">{{
+                        tab.count
+                    }}</span>
+                </inertia-link>
             </nav>
         </div>
     </div>
 </template>
 
 <script>
-const tabs = [
-    { name: "Users", href: "#", current: false },
-    { name: "Reported Users", href: "#", current: false },
-    { name: "Jobs & Courses", href: "#", current: true },
-];
-
 export default {
     name: "AdminNav",
-    setup() {
-        return {
-            tabs,
-        };
+    props: {
+        tabs: Array,
     },
 };
 </script>

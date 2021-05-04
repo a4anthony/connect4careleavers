@@ -11,20 +11,14 @@ use Inertia\Inertia;
 
 class PostController extends Controller
 {
-    public function all($username)
-    {
-        $user = User::where('username', $username)->first();
-        $postIds = [];
-        array_push($postIds, $user->id);
-        $friendsId = $user->friends()->pluck('friend_id');
-        foreach ($friendsId as $id) {
-            array_push($postIds, $id);
-        }
-        $feeds = Post::whereIn('user_id', $postIds)->orWhere('publicity', 'public')->latest()->paginate(5);
-        return response()->json($feeds);
-    }
-
-
+    /**
+     * Show post
+     *
+     * @param $username
+     * @param $postId
+     *
+     * @return \Inertia\Response
+     */
     public function show($username, $postId)
     {
         $user = User::where('username', $username)->first();
@@ -33,10 +27,17 @@ class PostController extends Controller
             ['id', $postId]
         ])->latest()->paginate(5);
         return Inertia::render('Post', [
-            'feed' => $feed
+            'feed' => $feed,
+            'pageTitle' => 'Posts - ' . config('app.name'),
         ]);
     }
 
+    /**
+     * Store new post
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store()
     {
         $randKey = Carbon::now()->format('_dnygis');
@@ -55,6 +56,12 @@ class PostController extends Controller
         return redirect()->back()->with('success', 'Posted successfully.');
     }
 
+    /**
+     * Like post
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function like()
     {
         if (!Like::where([
@@ -70,6 +77,12 @@ class PostController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Unlike post
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function unlike()
     {
         Like::where([
@@ -79,6 +92,12 @@ class PostController extends Controller
         return redirect()->back();
     }
 
+    /**
+     * Delete post
+     *
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy()
     {
         $post = Post::where([['user_id', \request()->user()->id], ['id', \request('post_id')]])->first();

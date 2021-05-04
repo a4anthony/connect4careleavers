@@ -1,5 +1,5 @@
 <template>
-    <app>
+    <app :page-title="$page.props.pageTitle">
         <div class="container mx-auto flex justify-center">
             <div class="px-3 w-full lg:w-2/3">
                 <feed :feeds="feed" :disable-comments="false" />

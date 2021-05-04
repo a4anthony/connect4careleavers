@@ -35,24 +35,46 @@ class Comment extends Model
 
     }
 
-
+    /**
+     * Comment author
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    /**
+     * Comment likes
+     *
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function likes()
     {
         return $this->hasMany(LikeComment::class, 'comment_id', 'id');
     }
 
-
+    /**
+     * Set created at
+     *
+     * @param $value
+     *
+     * @return string
+     */
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->diffForHumans();
     }
 
-
+    /**
+     * Check liked status
+     *
+     *
+     * @return mixed
+     */
     public function getLikedByCurrentUserAttribute()
     {
         return LikeComment::where([['user_id', request()->user()->id], ['comment_id', $this->attributes['id']]])->exists();

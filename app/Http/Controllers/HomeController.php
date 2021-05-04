@@ -11,6 +11,12 @@ use Inertia\Inertia;
 
 class HomeController extends Controller
 {
+    /**
+     * Gets all posts
+     *
+     *
+     * @return \Inertia\Response
+     */
     public function all()
     {
         $user = \request()->user();
@@ -26,18 +32,24 @@ class HomeController extends Controller
         return Inertia::render('Welcome', [
             'feeds' => $feeds,
             'jobs' => $jobs,
-            'pageTitle' => 'Home - ' . config('app.name'),
+            'pageTitle' => 'Posts - ' . config('app.name'),
 
         ]);
     }
 
-
+    /**
+     * Gets liked posts
+     *
+     *
+     * @return \Inertia\Response
+     */
     public function likedPosts()
     {
         $likedPostsId = Like::where('user_id', \request()->user()->id)->get()->pluck('post_id');
         $feeds = Post::whereIn('id', $likedPostsId)->latest()->paginate(10);
         return Inertia::render('Welcome', [
-            'feeds' => $feeds
+            'feeds' => $feeds,
+            'pageTitle' => 'Liked Posts - ' . config('app.name'),
         ]);
     }
 }

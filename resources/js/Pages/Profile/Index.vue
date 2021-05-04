@@ -1,5 +1,5 @@
 <template>
-    <app>
+    <app :page-title="$page.props.pageTitle">
         <div class="container mx-auto">
             <!-- Page header -->
             <div class="px-3 mx-auto">
