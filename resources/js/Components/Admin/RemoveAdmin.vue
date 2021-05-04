@@ -1,6 +1,6 @@
 <template>
     <button
-        v-if="user.current_friend"
+        v-if="user.is_admin"
         type="button"
         @click="openModal(user)"
         class="font-bold inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-400 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-red-500"
@@ -9,13 +9,13 @@
             v-if="!form.processing && !showModal"
             class="inline-flex items-center justify-center"
         >
-            <UserRemoveIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-            Unfriend</span
+            Remove Admin</span
         >
+        <loading-icon v-if="showModal || form.processing" />
 
         <confirm-modal
             :open="showModal"
-            @confirmed="unfriend"
+            @confirmed="removeAdmin"
             :text="modalText"
             @close="showModal = false"
         />
@@ -24,14 +24,12 @@
 
 <script>
 import ConfirmModal from "@/Shared/ConfirmModal";
-import { UserRemoveIcon } from "@heroicons/vue/outline";
 import LoadingIcon from "@/Shared/LoadingIcon";
 export default {
-    name: "Unfriend",
+    name: "RemoveAdmin",
     components: {
         LoadingIcon,
         ConfirmModal,
-        UserRemoveIcon,
     },
     props: {
         user: Object,
@@ -40,23 +38,23 @@ export default {
     data() {
         return {
             form: this.$inertia.form({
-                friend_id: "",
+                user_id: "",
             }),
-            selectedFriendId: "",
+            selectedUserId: "",
             showModal: false,
             modalText: "",
         };
     },
     methods: {
-        openModal(friend) {
-            this.modalText = `Are you sure you want to remove ${friend.name} as your friend?`;
+        openModal(user) {
+            this.modalText = `Are you sure you want to remove ${user.name} as an admin user?`;
             this.showModal = true;
-            this.selectedFriendId = friend.id;
+            this.selectedUserId = user.id;
         },
-        unfriend() {
+        removeAdmin() {
             this.showModal = false;
-            this.form.friend_id = this.selectedFriendId;
-            this.form.post(this.route("unfriend.friend"), {
+            this.form.user_id = this.selectedUserId;
+            this.form.post(this.route("removeAdmin.admin"), {
                 preserveScroll: true,
             });
         },

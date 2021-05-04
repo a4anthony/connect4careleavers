@@ -84,7 +84,7 @@
                         <div class="p-4">
                             <ul>
                                 <li
-                                    v-for="job in jobs"
+                                    v-for="(job, index) in jobs"
                                     :key="`job${job.id}`"
                                     class="my-1"
                                 >
@@ -92,9 +92,9 @@
                                         :href="job.url"
                                         class="font-semibold inline-flex items-center w-full text-sm text-gray-800 hover:text-gray-600"
                                     >
-                                        <ChevronRightIcon
-                                            class="w-6 h-6 font-bold mr-2"
-                                        />
+                                        <span class="mr-2 font-bold">
+                                            {{ index + 1 }}.
+                                        </span>
                                         <h3 class="truncate">
                                             {{ job.title }}
                                         </h3>

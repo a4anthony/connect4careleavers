@@ -1,8 +1,7 @@
 <template>
-    <app>
+    <app :page-title="$page.props.pageTitle">
         <div class="container mx-auto h-full">
             <div class="flex h-full justify-center px-3">
-                <!--<div class="bg-blue-500 flex-grow mr-4 h-full"></div>-->
                 <div
                     class="border bg-white shadow-sm rounded-lg flex-none w-full sm:w-2/3 h-full relative px-4 py-4"
                 >
@@ -66,23 +65,19 @@ export default {
     created() {
         Pusher.logToConsole = true;
 
-        var pusher = new Pusher("5c833ecd27bc5d86a4c9", {
-            cluster: "eu",
+        var pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
+            cluster: process.env.MIX_PUSHER_APP_CLUSTER,
             authEndpoint: "/broadcasting/auth",
-            // authEndpoint: "https://connect4careleavers.test/broadcasting/auth",
         });
         var channel = pusher.subscribe("private-chat");
         channel.bind("pusher:subscription_succeeded", function (data) {
-            console.log("data");
             console.log(data);
         });
         channel.bind("pusher:subscription_error", function (data) {
-            console.log("data");
             console.log(data);
         });
 
         channel.bind("client-typing", function (data) {
-            console.log("data");
             that.typingInfo = data;
             setTimeout(function () {
                 that.scrollToElement();
@@ -90,14 +85,10 @@ export default {
             setTimeout(function () {
                 that.typingInfo = null;
                 that.scrollToElement();
-                console.log("done typing");
             }, 2000);
-            console.log(data);
         });
         const that = this;
         channel.bind("newChat", function (data) {
-            console.log("data");
-
             if (
                 (data.message.user_id === that.user.id &&
                     data.message.friend_id === that.friend.id) ||
@@ -108,9 +99,7 @@ export default {
                 setTimeout(function () {
                     that.scrollToElement();
                 }, 100);
-                console.log("data below");
             }
-            console.log(that.messagesArr);
         });
     },
     mounted() {

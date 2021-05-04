@@ -23,12 +23,6 @@
                         </div>
                     </div>
                     <div class="flex items-center justify-end xl:col-span-4">
-                        <button
-                            @click="friendOverlay = true"
-                            class="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            <MailIcon class="h-6 w-6 p-1" aria-hidden="true" />
-                        </button>
                         <inertia-link
                             :href="route('all.jobs')"
                             class="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -38,12 +32,6 @@
                                 aria-hidden="true"
                             />
                         </inertia-link>
-                        <a
-                            href="#"
-                            class="ml-5 flex-shrink-0 bg-white rounded-full p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            <BellIcon class="h-6 w-6 p-1" aria-hidden="true" />
-                        </a>
 
                         <!-- Profile dropdown -->
                         <Menu as="div" class="flex-shrink-0 relative ml-5">

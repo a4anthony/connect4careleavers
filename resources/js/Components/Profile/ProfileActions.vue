@@ -20,14 +20,7 @@
         <cancel-request :current-user="currentUser" :user="user" />
         <!--confirm request-->
         <confirm-request :current-user="currentUser" :user="user" />
-        <button
-            v-if="!currentUser"
-            type="button"
-            class="font-bold inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-red-500"
-        >
-            <FlagIcon class="-ml-0.5 mr-2 h-4 w-4" aria-hidden="true" />
-            Report
-        </button>
+        <!--edit profile-->
         <inertia-link
             v-if="currentUser"
             :href="route('edit.profile', { username: user.username })"

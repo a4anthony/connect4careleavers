@@ -1,9 +1,31 @@
 <template>
     <app :page-title="pageTitle">
         <div class="container mx-auto">
-            <stats />
-            <div class="my-6 bg-white shadow rounded-lg p-4">
-                <admin-nav />
+            <div class="px-3">
+                <stats :stats="stats" />
+            </div>
+            <div class="px-3 mt-6">
+                <div class="p-4 bg-white shadow rounded-lg">
+                    <admin-nav :tabs="tabs" />
+                </div>
+            </div>
+
+            <div class="my-6 rounded-lg p-4">
+                <div v-if="route().current() === 'admin'">
+                    <admin-users :users="users" />
+                </div>
+                <div
+                    class="bg-white shadow rounded-lg"
+                    v-if="route().current() === 'reportedUsers.admin'"
+                >
+                    reported
+                </div>
+                <div
+                    class="bg-white shadow rounded-lg"
+                    v-if="route().current() === 'jobs.admin'"
+                >
+                    <admin-jobs :jobs="jobs" />
+                </div>
             </div>
         </div>
     </app>
@@ -13,12 +35,56 @@
 import App from "@/Layouts/App";
 import Stats from "@/Components/Admin/Stats";
 import AdminNav from "@/Components/Admin/AdminNav";
+import AdminUsers from "@/Components/Admin/AdminUsers";
+import AdminJobs from "@/Components/Admin/AdminJobs";
 export default {
     name: "Dashboard",
     props: {
         pageTitle: String,
+        users: Array,
+        jobs: Array,
+        messagesCount: Number,
+        postsCount: Number,
     },
-    components: { AdminNav, Stats, App },
+    watch: {
+        users: {
+            handler() {
+                this.setTabs();
+                this.setStats();
+            },
+            deep: true,
+        },
+    },
+    components: { AdminJobs, AdminUsers, AdminNav, Stats, App },
+    data() {
+        return {
+            tabs: [],
+            stats: [],
+        };
+    },
+    mounted() {
+        this.setTabs();
+        this.setStats();
+    },
+    methods: {
+        setTabs() {
+            this.tabs = [
+                { name: "Users", href: "admin", count: this.users.length },
+                {
+                    name: "Jobs & Courses",
+                    href: "jobs.admin",
+                    count: this.jobs.length,
+                },
+            ];
+        },
+        setStats() {
+            this.stats = [
+                { name: "Total Users", stat: this.users.length },
+                { name: "Total Posts", stat: this.postsCount },
+                { name: "Total Messages", stat: this.messagesCount },
+            ];
+        },
+    },
 };
 </script>
 

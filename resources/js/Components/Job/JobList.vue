@@ -1,11 +1,15 @@
 <template>
     <ul>
-        <li v-for="job in jobs" :key="`job${job.id}`" class="my-4">
+        <li
+            v-for="(job, index) in jobs.data"
+            :key="`job${job.id}`"
+            class="my-4"
+        >
             <a
                 :href="job.url"
                 class="font-semibold inline-flex items-center w-full text-sm text-gray-800 hover:text-gray-600"
             >
-                <ChevronRightIcon class="w-6 h-6 font-bold mr-2" />
+                <span class="mr-2 font-bold"> {{ index + jobs.from }}. </span>
                 <h3>{{ job.title }}</h3>
             </a>
         </li>
@@ -17,6 +21,7 @@ import { ChevronRightIcon } from "@heroicons/vue/outline";
 
 export default {
     name: "JobList",
+
     components: {
         ChevronRightIcon,
     },

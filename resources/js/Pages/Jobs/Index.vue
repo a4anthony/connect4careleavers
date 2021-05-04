@@ -9,7 +9,7 @@
                         </h1>
                     </div>
                     <div class="border-b-2 my-6 border-b-width-1"></div>
-                    <job-list :jobs="jobs.data" />
+                    <job-list :jobs="jobs" />
                 </div>
 
                 <div class="mt-6" v-if="jobs.total > 15">

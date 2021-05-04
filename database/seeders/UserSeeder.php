@@ -15,11 +15,21 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::factory()->create([
-            'email' => 'test@email.com',
-            'username' => 'a4anthony',
+            'email' => 'john@email.com',
+            'username' => 'johndoe',
+            'name'=> 'John Doe',
             'is_active' => true,
             'is_admin' => true,
+            'avatar' => 'https://via.placeholder.com/400x400.png/0088dd?text=JD'
         ]);
-        User::factory(49)->create();
+        User::factory()->create([
+            'email' => 'admin@email.com',
+            'username' => 'admin',
+            'name'=> 'Admin User',
+            'is_active' => true,
+            'is_admin' => true,
+            'avatar' => 'https://via.placeholder.com/400x400.png/0088dd?text=AU'
+        ]);
+        User::factory(48)->create();
     }
 }
