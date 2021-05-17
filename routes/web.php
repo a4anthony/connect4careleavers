@@ -27,8 +27,8 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 //POST
-Route::get('/post/{username}', [\App\Http\Controllers\PostController::class, 'all'])
-    ->middleware(['auth', 'verified'])->name('all.post');
+//Route::get('/posts/{username}', [\App\Http\Controllers\PostController::class, 'all'])
+//    ->middleware(['auth', 'verified'])->name('all.post');
 
 Route::get('/post/{username}/{postId}', [\App\Http\Controllers\PostController::class, 'show'])
     ->middleware(['auth', 'verified'])->name('show.post');

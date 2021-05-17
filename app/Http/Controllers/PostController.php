@@ -26,6 +26,7 @@ class PostController extends Controller
             ['user_id', $user->id],
             ['id', $postId]
         ])->latest()->paginate(5);
+
         return Inertia::render('Post', [
             'feed' => $feed,
             'pageTitle' => 'Posts - ' . config('app.name'),

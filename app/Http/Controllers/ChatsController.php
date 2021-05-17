@@ -27,6 +27,7 @@ class ChatsController extends Controller
 
         $userMsgsIds = $user->messages->where('friend_id', $authUser->id)->pluck('id');
         $authUserMsgsIds = $authUser->messages->where('friend_id', $user->id)->pluck('id');
+
         $msgIds = $userMsgsIds->merge($authUserMsgsIds);
 
         $msgs = Message::whereIn('id', $msgIds)->orderBy('created_at', 'ASC')->get()->toArray();

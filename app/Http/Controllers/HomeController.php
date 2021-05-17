@@ -47,8 +47,11 @@ class HomeController extends Controller
     {
         $likedPostsId = Like::where('user_id', \request()->user()->id)->get()->pluck('post_id');
         $feeds = Post::whereIn('id', $likedPostsId)->latest()->paginate(10);
+        $jobs = Job::latest()->limit(5)->get();
+
         return Inertia::render('Welcome', [
             'feeds' => $feeds,
+            'jobs' => $jobs,
             'pageTitle' => 'Liked Posts - ' . config('app.name'),
         ]);
     }

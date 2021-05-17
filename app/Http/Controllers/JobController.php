@@ -31,7 +31,10 @@ class JobController extends Controller
      */
     public function store()
     {
-        Job::create(\request()->all());
+        Job::create([
+            'title' => \request('title'),
+            'url' => \request('url'),
+        ]);
         return redirect()->back()->with('success', 'Job/Course added.');
 
     }

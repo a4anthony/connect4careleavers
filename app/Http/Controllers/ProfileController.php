@@ -23,11 +23,14 @@ class ProfileController extends Controller
     public function show($username)
     {
         $user = User::where('username', $username)->first();
+
         $friendsId1 = Friend::where('user_id', $user->id)
             ->get()->pluck('friend_id');
         $friendsId2 = Friend::where([['status', true], ['friend_id', $user->id]])
             ->get()->pluck('user_id');
+
         $friendsId = $friendsId1->merge($friendsId2);
+
         $friendRequestsId = Friend::where([['status', false], ['friend_id', $user->id]])
             ->get()->pluck('user_id');
 
@@ -40,6 +43,7 @@ class ProfileController extends Controller
 
         $friends = User::whereIn('id', $friendsId)->latest()->get()->toArray();
         $friendRequests = User::whereIn('id', $friendRequestsId)->latest()->get()->toArray();
+
 
         return Inertia::render('Profile/Index', [
             'user' => $user,

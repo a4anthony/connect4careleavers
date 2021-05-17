@@ -19,7 +19,9 @@ class CreatePostsTable extends Migration
             $table->string('image')->nullable();
             $table->string('publicity')->default('public');
             $table->foreignId('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
