@@ -78,6 +78,11 @@ class ProfileController extends Controller
             $ext = '.' . request()->file('avatar')->getClientOriginalExtension();
             request()->file('avatar')->storeAs('public/avatars', request()->user()->id . $randKey . $ext);
             $path = '/storage/avatars/' . request()->user()->id . $randKey . $ext;
+
+            if (config('app.deploy_env') === 'heroku') {
+                request()->file('avatar')->move(public_path('/avatars'), request()->user()->id . $randKey . $ext);
+                $path = '/avatars/' . request()->user()->id . $randKey . $ext;
+            }
         } else {
             $path = \request('avatar');
         }

@@ -47,6 +47,11 @@ class PostController extends Controller
             $ext = '.' . request()->file('image')->getClientOriginalExtension();
             request()->file('image')->storeAs('public/posts', request()->user()->id . $randKey . $ext);
             $path = '/storage/posts/' . request()->user()->id . $randKey . $ext;
+
+            if (config('app.deploy_env') === 'heroku') {
+                request()->file('image')->move(public_path('/posts'), request()->user()->id . $randKey . $ext);
+                $path = '/posts/' . request()->user()->id . $randKey . $ext;
+            }
         }
         Post::create([
             'body' => \request('body'),
